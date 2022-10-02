@@ -15,17 +15,11 @@ const setAllTask = (payload) => store.dispatch("task/SET_ALL_TASK", payload);
 // ##################################################################################
 const taskStore = useTaskStore();
 
+console.log(taskStore);
+
 // vuex-composition-helpers 방법
 // vuex-composition-helpers 방법 - State, Getters
-const { LIST: list2 } = taskStore.useState([taskStore.StateType.LIST]);
-const { COMPLETED_COUNT: completedCount } = taskStore.useGetters([
-  taskStore.GetterType.COMPLETED_COUNT,
-]);
-
-// vuex-composition-helpers 방법 - Actions
-const taskActions = {
-  ...taskStore.useActions([taskStore.ActionType.SET_ALL_TASK]),
-};
+const { LIST: list2 } = taskStore;
 
 // ##################################################################################
 
@@ -49,7 +43,7 @@ function onClickMethod2() {
     { id: 3, completed: false },
   ];
 
-  taskActions[taskStore.ActionType.SET_ALL_TASK](data);
+  taskStore[taskStore.ActionType.SET_ALL_TASK](data);
 }
 </script>
 
@@ -71,7 +65,7 @@ function onClickMethod2() {
         </li>
       </ul>
     </div>
-    <div>{{ completedCount }}</div>
+    <div>{{ taskStore[taskStore.GetterType.COMPLETED_COUNT] }}</div>
     <button @click="onClickMethod2">SET_ALL_TASK</button>
   </main>
 </template>

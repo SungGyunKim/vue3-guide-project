@@ -7,8 +7,10 @@
  *
  * @copyRight COPYRIGHT © OSSTEM IMPLANT CO., LTD. ALL RIGHTS RESERVED.
  */
-import taskApi from "@/api/taskApi";
+import { computed } from "vue";
+import { useStore } from "vuex";
 import { createNamespacedHelpers } from "vuex-composition-helpers";
+import taskApi from "@/api/taskApi";
 
 const NAMESPACE = "task";
 
@@ -90,9 +92,9 @@ const useTaskStore = () => {
     StateType,
     GetterType,
     ActionType,
-    useState,
-    useGetters,
-    useActions,
+    ...useState(Object.keys(StateType)),
+    ...useGetters(Object.keys(GetterType)),
+    ...useActions(Object.keys(ActionType)),
   };
 };
 
