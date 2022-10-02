@@ -19,10 +19,8 @@ const taskStore = useTaskStore();
 
 // vuex-composition-helpers 방법
 // vuex-composition-helpers 방법 - State, Getters
-const taskState = {
-  ...taskStore.useState([taskStore.StateType.LIST]),
-  ...taskStore.useGetters([taskStore.GetterType.COMPLETED_COUNT]),
-};
+const { LIST: list } = taskStore.useState([taskStore.StateType.LIST]);
+const { COMPLETED_COUNT : completedCount } = taskStore.useGetters([taskStore.GetterType.COMPLETED_COUNT])
 
 // vuex-composition-helpers 방법 - Actions
 const taskActions = {
@@ -70,12 +68,12 @@ function onClickMethod2() {
     <h1>vuex-composition-helpers 방법</h1>
     <div>
       <ul>
-        <li v-for="item in taskState[taskStore.StateType.LIST]" :key="item">
+        <li v-for="item in list" :key="item">
           {{ item }}
         </li>
       </ul>
     </div>
-    <div>{{ taskState[taskStore.GetterType.COMPLETED_COUNT] }}</div>
+    <div>{{ completedCount }}</div>
     <button @click="onClickMethod2">SET_ALL_TASK</button>
   </main>
 </template>
