@@ -12,22 +12,20 @@ const competedCount = computed(() => store.getters["task/COMPLETED_COUNT"]);
 // vuex 방법 - Actions
 const setAllTask = (payload) => store.dispatch("task/SET_ALL_TASK", payload);
 
-console.log(list);
-
 // ##################################################################################
 const taskStore = useTaskStore();
 
 // vuex-composition-helpers 방법
 // vuex-composition-helpers 방법 - State, Getters
-const { LIST: list } = taskStore.useState([taskStore.StateType.LIST]);
-const { COMPLETED_COUNT : completedCount } = taskStore.useGetters([taskStore.GetterType.COMPLETED_COUNT])
+const { LIST: list2 } = taskStore.useState([taskStore.StateType.LIST]);
+const { COMPLETED_COUNT: completedCount } = taskStore.useGetters([
+  taskStore.GetterType.COMPLETED_COUNT,
+]);
 
 // vuex-composition-helpers 방법 - Actions
 const taskActions = {
   ...taskStore.useActions([taskStore.ActionType.SET_ALL_TASK]),
 };
-
-console.log(taskState[taskStore.StateType.LIST]);
 
 // ##################################################################################
 
@@ -68,7 +66,7 @@ function onClickMethod2() {
     <h1>vuex-composition-helpers 방법</h1>
     <div>
       <ul>
-        <li v-for="item in list" :key="item">
+        <li v-for="item in list2" :key="item">
           {{ item }}
         </li>
       </ul>
