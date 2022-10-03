@@ -1,52 +1,59 @@
 <script setup>
-import { reactive, onUpdated, toRefs } from "vue";
+import { onUpdated, ref } from "vue";
 import { useTaskStore } from "@/store/task";
 
 /**********************************************************
- * 컴포넌트 준비 작업
+ * 컴포넌트 props, emits, expose 정의
  **********************************************************/
 const props = defineProps({});
 const emits = defineEmits([]);
 defineExpose({});
+
+/**********************************************************
+ * 컴포넌트 state
+ **********************************************************/
 const taskStore = useTaskStore();
 const { VIEW, TASK } = taskStore;
+let taskData = ref({});
+
+const taskDataState = ref({
+  descriptionState: null,
+});
 
 /**********************************************************
  * 컴포넌트 라이프사이클 훅
  **********************************************************/
 onUpdated(async () => {
   if (VIEW.value.id) {
-    await getTaskById(VIEW.value.id);
+    await taskStore[taskStore.ActionType.GET_TASK_BY_ID]({
+      id: VIEW.value.id,
+    });
+    taskData.value = { ...TASK.value };
   }
 });
 
-// state
-let taskData = reactive({
-  owner: "",
-  id: "",
-  description: "",
-  completed: false,
-});
-
-const taskDataState = reactive({
-  descriptionState: null,
-});
-
-async function getTaskById(id) {
-  await taskStore[taskStore.ActionType.GET_TASK_BY_ID]({
-    id,
-  });
+/**********************************************************
+ * 컴포넌트 이벤트 핸들러
+ **********************************************************/
+function onSaveClick() {
+  if (VIEW.value.id) {
+    // TODO UPDATE
+  } else {
+    // TODO INSERT
+  }
 }
-
-function onSaveClick() {}
 
 function onCancelClick() {
   close();
 }
 
+/**********************************************************
+ * 일반 함수
+ **********************************************************/
 function close() {
   taskStore[taskStore.ActionType.SET_VIEW]({
     visible: false,
+    id: null,
   });
 }
 </script>
@@ -54,39 +61,39 @@ function close() {
 <template>
   <b-modal v-model="VIEW.visible" size="lg" scrollable centered>
     <!-- title area -->
-    <template #title> Task 등록/수정 팝업 </template>
+    <template #title> Task {{ VIEW.id ? "수정" : "등록" }} 팝업 </template>
     <!-- content area -->
     <template #default="">
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <!-- Task ID -->
-        <b-form-group label="Task ID" label-for="task-id-input">
+        <b-form-group label="Task ID" label-for="task-id-input" v-if="VIEW.id">
           <b-form-input
             id="task-id-input"
-            v-model="TASK._id"
+            v-model="taskData._id"
             disabled
           ></b-form-input>
         </b-form-group>
         <!-- 소유자 -->
-        <b-form-group label="소유자" label-for="owner-input">
+        <b-form-group label="소유자" label-for="owner-input" v-if="VIEW.id">
           <b-form-input
             id="owner-input"
-            v-model="TASK.owner"
+            v-model="taskData.owner"
             disabled
           ></b-form-input>
         </b-form-group>
         <!-- 생성일 -->
-        <b-form-group label="생성일" label-for="owner-input">
+        <b-form-group label="생성일" label-for="owner-input" v-if="VIEW.id">
           <b-form-input
             id="owner-input"
-            v-model="TASK.createdAt"
+            v-model="taskData.createdAt"
             disabled
           ></b-form-input>
         </b-form-group>
         <!-- 수정일 -->
-        <b-form-group label="수정일" label-for="owner-input">
+        <b-form-group label="수정일" label-for="owner-input" v-if="VIEW.id">
           <b-form-input
             id="owner-input"
-            v-model="TASK.updatedAt"
+            v-model="taskData.updatedAt"
             disabled
           ></b-form-input>
         </b-form-group>
@@ -99,7 +106,7 @@ function close() {
         >
           <b-form-input
             id="description-input"
-            v-model="TASK.description"
+            v-model="taskData.description"
             :state="taskDataState.descriptionState"
             required
             placeholder="할 일에 대한 설명을 입력하세요."
@@ -109,19 +116,19 @@ function close() {
         <b-form-group label="완료 여부" label-for="completed-input">
           <b-form-checkbox
             id="completed-input"
-            v-model="TASK.completed"
+            v-model="taskData.completed"
             required
             switch
             size="lg"
           >
-            {{ TASK.completed ? "완료" : "미완료" }}
+            {{ taskData.completed ? "완료" : "미완료" }}
           </b-form-checkbox>
         </b-form-group>
       </form>
     </template>
     <template #footer>
       <b-button size="sm" variant="success" @click="onSaveClick()">
-        저장
+        {{ VIEW.id ? "수정" : "등록" }}
       </b-button>
       <b-button size="sm" variant="danger" @click="onCancelClick()">
         취소
