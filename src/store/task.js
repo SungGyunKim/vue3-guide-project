@@ -15,6 +15,7 @@ import taskApi from "@/api/taskApi";
 const NAMESPACE = "task";
 
 const StateType = Object.freeze({
+  VIEW: "VIEW",
   LIST: "LIST",
   FILTER: "FILTER",
 });
@@ -26,23 +27,30 @@ const GetterType = Object.freeze({
 
 const MutationType = Object.freeze({
   RESET: "RESET",
+  SET_VIEW: "SET_VIEW",
   SET_ALL_TASK: "SET_ALL_TASK",
 });
 
 const ActionType = Object.freeze({
   RESET: "RESET",
+  SET_VIEW: "SET_VIEW",
   GET_ALL_TASK: "GET_ALL_TASK",
   SET_ALL_TASK: "SET_ALL_TASK",
 });
 
-const initialState = () => ({
-  /** @type {{ completed :boolean, _id: string, description: string, owner: string, createdAt: string, updatedAt: string, __v: number }[]} */
-  [StateType.LIST]: [],
-  /** @type {'all' | 'finished' | 'unfinished'} */
-  [StateType.FILTER]: "all",
-});
+const state = getInitialState();
 
-const state = initialState();
+function getInitialState() {
+  return {
+    [StateType.VIEW]: {
+      taskPopupShow: false,
+    },
+    /** @type {{ completed :boolean, _id: string, description: string, owner: string, createdAt: string, updatedAt: string, __v: number }[]} */
+    [StateType.LIST]: [],
+    /** @type {'all' | 'finished' | 'unfinished'} */
+    [StateType.FILTER]: "all",
+  };
+}
 
 const getters = {
   [GetterType.COMPLETED_COUNT](state) {
@@ -55,9 +63,14 @@ const getters = {
 
 const mutations = {
   [MutationType.RESET](state, payload) {
-    const newState = initialState();
+    const newState = getInitialState();
     Object.keys(newState).forEach((key) => {
       state[key] = newState[key];
+    });
+  },
+  [MutationType.SET_VIEW](state, payload) {
+    Object.keys(payload).forEach((key) => {
+      state[StateType.VIEW][key] = payload[key];
     });
   },
   [MutationType.SET_ALL_TASK](state, payload) {
@@ -67,7 +80,10 @@ const mutations = {
 
 const actions = {
   async [ActionType.RESET](context, payload) {
-    context.commit("RESET", payload);
+    context.commit(MutationType.RESET, payload);
+  },
+  async [ActionType.SET_VIEW](context, payload) {
+    context.commit(MutationType.SET_VIEW, payload);
   },
   async [ActionType.SET_ALL_TASK](context, payload) {
     context.commit(MutationType.SET_ALL_TASK, payload);

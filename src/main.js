@@ -12,12 +12,12 @@ import "./assets/main.css";
 
 const app = createApp(App);
 
+app.use(router);
+app.use(store);
+
 // Make BootstrapVue available throughout your project
 app.use(BootstrapVue3);
 // Optionally install the BootstrapVue icon components plugin
 app.use(BToastPlugin);
-
-app.use(router);
-app.use(store);
 
 app.mount("#app");

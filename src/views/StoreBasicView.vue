@@ -3,7 +3,6 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 import { useTaskStore } from "@/store/task";
 
-// vuex 방법
 // vuex 방법 - State, Getters
 const store = useStore();
 const list = computed(() => store.state.task.LIST);
@@ -17,8 +16,7 @@ const taskStore = useTaskStore();
 
 console.log(taskStore);
 
-// vuex-composition-helpers 방법
-// vuex-composition-helpers 방법 - State, Getters
+// vuex-composition-helpers 방법 - State
 const { LIST: list2 } = taskStore;
 
 // ##################################################################################

@@ -1,38 +1,34 @@
 <script setup>
-import { computed } from "vue";
+import { ref } from "vue";
 import { useTaskStore } from "@/store/task";
+import TaskPopup from "../components/TaskPopup.vue";
 
-const items = computed(() => [
-  { isActive: true, age: 40, first_name: "Dickerson", last_name: "Macdonald" },
-  { isActive: false, age: 21, first_name: "Larsen", last_name: "Shaw" },
-  { isActive: false, age: 89, first_name: "Geneva", last_name: "Wilson" },
-  { isActive: true, age: 38, first_name: "Jami", last_name: "Carney" },
-]);
-
+const taskPopupVisible = ref(false);
 const taskStore = useTaskStore();
+const { LIST } = taskStore;
 
-const taskState = {
-  ...taskStore.useState([taskStore.StateType.LIST]),
-  ...taskStore.useGetters([taskStore.GetterType.COMPLETED_COUNT]),
-};
+await taskStore[taskStore.ActionType.GET_ALL_TASK]();
 
-const taskActions = {
-  ...taskStore.useActions([taskStore.ActionType.GET_ALL_TASK]),
-};
+function onAddClick() {
+  taskPopupVisible.value = true;
+}
 
-await taskActions[taskStore.ActionType.GET_ALL_TASK]();
+function onRowClick(item) {
+  taskPopupVisible.value = true;
+}
 </script>
 <template>
   <main>
-    <b-table striped hover :items="items"></b-table>
-    {{ taskState[taskStore.StateType.LIST] }}
-
-    <div
-      v-for="(item, index) in taskState[taskStore.StateType.LIST]"
-      :key="index"
-    >
-      {{ item }}
-    </div>
+    <b-button variant="primary" @click="onAddClick">추가</b-button>
+    <b-table
+      dark
+      striped
+      hover
+      sticky-header="true"
+      :items="LIST"
+      @row-clicked="onRowClick"
+    ></b-table>
+    <TaskPopup :visible="taskPopupVisible"></TaskPopup>
   </main>
 </template>
 <style lang="scss" scoped></style>

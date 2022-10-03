@@ -10,6 +10,9 @@
     "sourceMap": true,
     "checkJs": true // Typecheck .js files.
   },
+  "vueCompilerOptions": {
+    "experimentalDisableTemplateSupport": true
+  },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "public"]
 }
