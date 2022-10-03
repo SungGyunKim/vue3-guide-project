@@ -18,6 +18,7 @@ const StateType = Object.freeze({
   VIEW: "VIEW",
   LIST: "LIST",
   FILTER: "FILTER",
+  TASK: "TASK",
 });
 
 const GetterType = Object.freeze({
@@ -29,6 +30,7 @@ const MutationType = Object.freeze({
   RESET: "RESET",
   SET_VIEW: "SET_VIEW",
   SET_ALL_TASK: "SET_ALL_TASK",
+  SET_TASK: "SET_TASK",
 });
 
 const ActionType = Object.freeze({
@@ -36,6 +38,7 @@ const ActionType = Object.freeze({
   SET_VIEW: "SET_VIEW",
   GET_ALL_TASK: "GET_ALL_TASK",
   SET_ALL_TASK: "SET_ALL_TASK",
+  GET_TASK_BY_ID: "GET_TASK_BY_ID",
 });
 
 const state = getInitialState();
@@ -43,8 +46,10 @@ const state = getInitialState();
 function getInitialState() {
   return {
     [StateType.VIEW]: {
-      taskPopupShow: false,
+      visible: false,
+      id: null,
     },
+    [StateType.TASK]: {},
     /** @type {{ completed :boolean, _id: string, description: string, owner: string, createdAt: string, updatedAt: string, __v: number }[]} */
     [StateType.LIST]: [],
     /** @type {'all' | 'finished' | 'unfinished'} */
@@ -76,6 +81,9 @@ const mutations = {
   [MutationType.SET_ALL_TASK](state, payload) {
     state[StateType.LIST] = payload;
   },
+  [MutationType.SET_TASK](state, payload) {
+    state[StateType.TASK] = payload;
+  },
 };
 
 const actions = {
@@ -93,6 +101,15 @@ const actions = {
     try {
       const result = await taskApi.getAllTask();
       context.commit(MutationType.SET_ALL_TASK, result.data);
+      return Promise.resolve();
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  },
+  async [ActionType.GET_TASK_BY_ID](context, payload) {
+    try {
+      const result = await taskApi.getTaskById(payload.id);
+      context.commit(MutationType.SET_TASK, result.data);
       return Promise.resolve();
     } catch (e) {
       return Promise.reject(e);

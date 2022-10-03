@@ -3,19 +3,32 @@ import { ref } from "vue";
 import { useTaskStore } from "@/store/task";
 import TaskPopup from "../components/TaskPopup.vue";
 
-const taskPopupVisible = ref(false);
 const taskStore = useTaskStore();
 const { LIST } = taskStore;
 
-await taskStore[taskStore.ActionType.GET_ALL_TASK]();
+function init() {
+  getAllTask();
+}
+
+async function getAllTask() {
+  await taskStore[taskStore.ActionType.GET_ALL_TASK]();
+}
 
 function onAddClick() {
-  taskPopupVisible.value = true;
+  taskStore[taskStore.ActionType.SET_VIEW]({
+    visible: true,
+    id: null,
+  });
 }
 
 function onRowClick(item) {
-  taskPopupVisible.value = true;
+  taskStore[taskStore.ActionType.SET_VIEW]({
+    visible: true,
+    id: item._id,
+  });
 }
+
+init();
 </script>
 <template>
   <main>
@@ -28,7 +41,7 @@ function onRowClick(item) {
       :items="LIST"
       @row-clicked="onRowClick"
     ></b-table>
-    <TaskPopup :visible="taskPopupVisible"></TaskPopup>
+    <TaskPopup></TaskPopup>
   </main>
 </template>
 <style lang="scss" scoped></style>
