@@ -5,19 +5,11 @@ import LayoutHeader from "@/layout/LayoutHeader.vue";
 
 <template>
   <LayoutHeader></LayoutHeader>
-  <div class="view-container">
-    <Suspense timeout="0">
-      <RouterView v-slot="{ Component, route }">
-        <transition :name="route.meta.transition || 'fade'" mode="out-in">
-          <keep-alive>
-            <div>
-              <component :is="Component" />
-            </div>
-          </keep-alive>
-        </transition>
-      </RouterView>
-    </Suspense>
-  </div>
+  <Suspense timeout="0">
+    <RouterView v-slot="{ Component }">
+      <component :is="Component" />
+    </RouterView>
+  </Suspense>
 </template>
 
 <style scoped></style>

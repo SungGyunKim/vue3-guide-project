@@ -35,11 +35,13 @@ onUpdated(async () => {
 /**********************************************************
  * 컴포넌트 이벤트 핸들러
  **********************************************************/
-function onSaveClick() {
+async function onSaveClick() {
   if (VIEW.value.id) {
-    // TODO UPDATE
+    // 수정
   } else {
-    // TODO INSERT
+    // 등록
+    await taskStore[taskStore.ActionType.ADD_TASK](taskData);
+    await taskStore[taskStore.ActionType.GET_ALL_TASK]();
   }
 }
 
