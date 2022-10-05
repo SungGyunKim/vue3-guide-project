@@ -26,6 +26,19 @@ onBeforeMount(async () => {
 /**********************************************************
  * 컴포넌트 이벤트 핸들러
  **********************************************************/
+function onSetStateClick() {
+  taskStore[taskStore.ActionType.SET_STATE]({
+    [taskStore.StateType.VIEW]: {
+      visible: true,
+      id: null,
+    },
+  });
+}
+
+function onResetStateClick() {
+  taskStore[taskStore.ActionType.RESET_STATE]([taskStore.StateType.LIST]);
+}
+
 function onAddClick() {
   taskStore[taskStore.ActionType.SET_VIEW]({
     visible: true,
@@ -51,7 +64,9 @@ function onRowClick(item) {
       <b-col> {{ taskStore[taskStore.GetterType.INCOMPLETE_COUNT] }} </b-col>
     </b-row>
     <b-row align-h="end" class="mt-2 mb-2">
-      <b-col cols="auto">
+      <b-col cols="auto" class="btn-area">
+        <b-button variant="primary" @click="onSetStateClick">SET</b-button>
+        <b-button variant="primary" @click="onResetStateClick">RESET</b-button>
         <b-button variant="primary" @click="onAddClick">추가</b-button>
       </b-col>
     </b-row>
@@ -70,4 +85,12 @@ function onRowClick(item) {
   </b-container>
   <TaskPopup></TaskPopup>
 </template>
-<style lang="scss" scoped></style>
+<style scoped>
+.btn-area button {
+  margin-right: 10px;
+}
+
+.btn-area button:last-child {
+  margin-right: 0px;
+}
+</style>

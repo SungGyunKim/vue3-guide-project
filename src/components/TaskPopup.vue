@@ -40,9 +40,15 @@ async function onSaveClick() {
     // 수정
   } else {
     // 등록
-    await taskStore[taskStore.ActionType.ADD_TASK](taskData);
+    await taskStore[taskStore.ActionType.ADD_TASK](taskData.value);
     await taskStore[taskStore.ActionType.GET_ALL_TASK]();
   }
+
+  close();
+}
+
+async function onDeleteClick() {
+  close();
 }
 
 function onCancelClick() {
@@ -115,7 +121,11 @@ function close() {
           ></b-form-input>
         </b-form-group>
         <!-- 완료 여부 -->
-        <b-form-group label="완료 여부" label-for="completed-input">
+        <b-form-group
+          label="완료 여부"
+          label-for="completed-input"
+          v-if="VIEW.id"
+        >
           <b-form-checkbox
             id="completed-input"
             v-model="taskData.completed"
@@ -132,9 +142,10 @@ function close() {
       <b-button size="sm" variant="success" @click="onSaveClick()">
         {{ VIEW.id ? "수정" : "등록" }}
       </b-button>
-      <b-button size="sm" variant="danger" @click="onCancelClick()">
-        취소
+      <b-button size="sm" variant="danger" @click="onDeleteClick()">
+        삭제
       </b-button>
+      <b-button size="sm" @click="onCancelClick()"> 취소 </b-button>
     </template>
   </b-modal>
 </template>

@@ -27,14 +27,18 @@ const GetterType = Object.freeze({
 });
 
 const MutationType = Object.freeze({
-  RESET: "RESET",
+  RESET_STATE: "RESET_STATE",
+  SET_STATE: "SET_STATE",
+  MERGE_STATE: "MERGE_STATE",
   SET_VIEW: "SET_VIEW",
   SET_ALL_TASK: "SET_ALL_TASK",
   SET_TASK: "SET_TASK",
 });
 
 const ActionType = Object.freeze({
-  RESET: "RESET",
+  RESET_STATE: "RESET_STATE",
+  SET_STATE: "SET_STATE",
+  MERGE_STATE: "MERGE_STATE",
   SET_VIEW: "SET_VIEW",
   GET_ALL_TASK: "GET_ALL_TASK",
   SET_ALL_TASK: "SET_ALL_TASK",
@@ -68,12 +72,35 @@ const getters = {
 };
 
 const mutations = {
-  [MutationType.RESET](state, payload) {
-    const newState = getInitialState();
-    Object.keys(newState).forEach((key) => {
-      state[key] = newState[key];
+  // 모든 Store 기능
+  [MutationType.RESET_STATE](state, payload) {
+    const initialState = getInitialState();
+    let resetTargetKeys = [];
+
+    if (Array.isArray(payload)) {
+      // 존재하는 State만 초기화 대상으로 지정한다
+      resetTargetKeys = Object.keys(initialState).filter((x) =>
+        payload.includes(x)
+      );
+    } else {
+      resetTargetKeys = Object.keys(initialState);
+    }
+
+    resetTargetKeys.forEach((resetTargetKey) => {
+      state[resetTargetKey] = initialState[resetTargetKey];
     });
   },
+  [MutationType.SET_STATE](state, payload) {
+    const setTargetKeys = Object.keys(payload);
+
+    setTargetKeys.forEach((setTargetKey) => {
+      state[setTargetKey] = payload[setTargetKey];
+    });
+  },
+  [MutationType.MERGE_STATE](state, payload) {
+    // TODO
+  },
+  // 해당 Store 기능
   [MutationType.SET_VIEW](state, payload) {
     Object.keys(payload).forEach((key) => {
       state[StateType.VIEW][key] = payload[key];
@@ -88,9 +115,20 @@ const mutations = {
 };
 
 const actions = {
-  async [ActionType.RESET](context, payload) {
-    context.commit(MutationType.RESET, payload);
+  // 모든 Store 기능
+  async [ActionType.RESET_STATE](context, payload) {
+    context.commit(MutationType.RESET_STATE, payload);
+    return;
   },
+  async [ActionType.SET_STATE](context, payload) {
+    context.commit(MutationType.SET_STATE, payload);
+    return;
+  },
+  async [ActionType.MERGE_STATE](context, payload) {
+    context.commit(MutationType.MERGE_STATE, payload);
+    return;
+  },
+  // 해당 Store 기능
   async [ActionType.SET_VIEW](context, payload) {
     context.commit(MutationType.SET_VIEW, payload);
   },
