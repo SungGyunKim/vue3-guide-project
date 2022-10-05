@@ -49,8 +49,8 @@ function getInitialState() {
       visible: false,
       id: null,
     },
-    [StateType.TASK]: {},
-    /** @type {{ completed :boolean, _id: string, description: string, owner: string, createdAt: string, updatedAt: string, __v: number }[]} */
+    /** @type {{ completed :boolean, _id: string, description: string, owner: string, createdAt: string, updatedAt: string, __v: number }} */
+    [StateType.TASK]: null,
     [StateType.LIST]: [],
     /** @type {'all' | 'finished' | 'unfinished'} */
     [StateType.FILTER]: "all",
