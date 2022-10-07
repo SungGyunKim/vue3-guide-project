@@ -3,13 +3,13 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand href="#">NavBar</b-navbar-brand>
+      <b-navbar-brand href="#">Project Guide</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item to="/">Home </b-nav-item>
+          <b-nav-item to="/StoreConsoleView">StoreConsoleView</b-nav-item>
           <b-nav-item to="/StoreBasicView">StoreBasicView</b-nav-item>
           <b-nav-item to="/TaskView">TaskView </b-nav-item>
         </b-navbar-nav>
@@ -55,5 +55,10 @@ nav a.router-link-exact-active {
 
 nav a.router-link-exact-active:hover {
   background-color: transparent;
+}
+
+:deep(.ml-auto),
+:deep(.mx-auto) {
+  margin-left: auto !important;
 }
 </style>

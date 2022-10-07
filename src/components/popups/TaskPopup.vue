@@ -12,42 +12,50 @@ defineExpose({});
 /**********************************************************
  * 컴포넌트 state
  **********************************************************/
+const initialState = {
+  taskData: {},
+  taskDataState: {
+    descriptionState: null,
+  },
+};
 const taskStore = useTaskStore();
 const { VIEW, TASK } = taskStore;
-let taskData = ref({});
-
-const taskDataState = ref({
-  descriptionState: null,
-});
+const taskData = ref(initialState.taskData);
+const taskDataState = ref(initialState.taskDataState);
 
 /**********************************************************
  * 컴포넌트 라이프사이클 훅
  **********************************************************/
-onUpdated(async () => {
+onUpdated(async () => {});
+
+/**********************************************************
+ * 컴포넌트 이벤트 핸들러
+ **********************************************************/
+async function onModalShow() {
   if (VIEW.value.id) {
     await taskStore[taskStore.ActionType.GET_TASK_BY_ID]({
       id: VIEW.value.id,
     });
     taskData.value = { ...TASK.value };
   }
-});
+}
 
-/**********************************************************
- * 컴포넌트 이벤트 핸들러
- **********************************************************/
 async function onSaveClick() {
   if (VIEW.value.id) {
-    // 수정
+    await taskStore[taskStore.ActionType.UPDATE_TASK_BY_ID](taskData.value);
   } else {
-    // 등록
     await taskStore[taskStore.ActionType.ADD_TASK](taskData.value);
-    await taskStore[taskStore.ActionType.GET_ALL_TASK]();
   }
+
+  await taskStore[taskStore.ActionType.GET_ALL_TASK]();
 
   close();
 }
 
 async function onDeleteClick() {
+  await taskStore[taskStore.ActionType.DELETE_TASK_BY_ID](taskData.value._id);
+  await taskStore[taskStore.ActionType.GET_ALL_TASK]();
+
   close();
 }
 
@@ -59,15 +67,27 @@ function onCancelClick() {
  * 일반 함수
  **********************************************************/
 function close() {
-  taskStore[taskStore.ActionType.SET_VIEW]({
-    visible: false,
-    id: null,
+  taskData.value = initialState.taskData;
+  taskDataState.value = initialState.taskDataState;
+
+  taskStore[taskStore.ActionType.SET_STATE]({
+    [taskStore.StateType.TASK]: {},
+    [taskStore.StateType.VIEW]: {
+      visible: false,
+      id: null,
+    },
   });
 }
 </script>
 
 <template>
-  <b-modal v-model="VIEW.visible" size="lg" scrollable centered>
+  <b-modal
+    v-model="VIEW.visible"
+    size="lg"
+    scrollable
+    centered
+    @show="onModalShow"
+  >
     <!-- title area -->
     <template #title> Task {{ VIEW.id ? "수정" : "등록" }} 팝업 </template>
     <!-- content area -->
@@ -117,6 +137,7 @@ function close() {
             v-model="taskData.description"
             :state="taskDataState.descriptionState"
             required
+            v-bind:disabled="VIEW.id ? true : false"
             placeholder="할 일에 대한 설명을 입력하세요."
           ></b-form-input>
         </b-form-group>
@@ -142,7 +163,12 @@ function close() {
       <b-button size="sm" variant="success" @click="onSaveClick()">
         {{ VIEW.id ? "수정" : "등록" }}
       </b-button>
-      <b-button size="sm" variant="danger" @click="onDeleteClick()">
+      <b-button
+        size="sm"
+        variant="danger"
+        @click="onDeleteClick()"
+        v-if="VIEW.id"
+      >
         삭제
       </b-button>
       <b-button size="sm" @click="onCancelClick()"> 취소 </b-button>
