@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ES2020",
     "target": "es6",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"], // the src folder
       "@@/*": ["./*"] // the project's root folder
     },
-    "sourceMap": true,
-    "checkJs": true // Typecheck .js files.
+    "allowJs": true,
+    "sourceMap": true
+    //"checkJs": true // Typecheck .js files.
   },
   "vueCompilerOptions": {
     "experimentalDisableTemplateSupport": true

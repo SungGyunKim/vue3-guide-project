@@ -1,7 +1,8 @@
 <script setup>
 import { onBeforeMount } from "vue";
 import { useTaskStore } from "@/store/task";
-import TaskPopup from "../components/TaskPopup.vue";
+import TaskPopup from "@/components/popups/TaskPopup.vue";
+import TaskFilterComponent from "@/components/TaskFilterComponent.vue";
 
 /**********************************************************
  * 컴포넌트 props, emits, expose 정의
@@ -14,7 +15,7 @@ defineExpose({});
  * 컴포넌트 state
  **********************************************************/
 const taskStore = useTaskStore();
-const { LIST } = taskStore;
+const { FILTERED_LIST } = taskStore;
 
 /**********************************************************
  * 컴포넌트 라이프사이클 훅
@@ -59,26 +60,28 @@ function onRowClick(item) {
 </script>
 <template>
   <b-container fluid>
-    <b-row>
-      <b-col> {{ taskStore[taskStore.GetterType.COMPLETED_COUNT] }} </b-col>
-      <b-col> {{ taskStore[taskStore.GetterType.INCOMPLETE_COUNT] }} </b-col>
+    <b-row class="mt-2">
+      <b-col>
+        <TaskFilterComponent></TaskFilterComponent>
+      </b-col>
     </b-row>
-    <b-row align-h="end" class="mt-2 mb-2">
+    <b-row align-h="end" class="mt-2">
       <b-col cols="auto" class="btn-area">
         <b-button variant="primary" @click="onSetStateClick">SET</b-button>
         <b-button variant="primary" @click="onResetStateClick">RESET</b-button>
         <b-button variant="primary" @click="onAddClick">추가</b-button>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row class="mt-2">
       <b-col>
         <b-table
           dark
           striped
           hover
           sticky-header="true"
-          :items="LIST"
+          :items="FILTERED_LIST"
           @row-clicked="onRowClick"
+          responsive="lg"
         ></b-table>
       </b-col>
     </b-row>

@@ -123,7 +123,9 @@ export async function updateTaskById(task) {
   myHeaders.append("Authorization", `Bearer ${userApi.getUser().token}`);
   myHeaders.append("Content-Type", "application/json");
 
-  var raw = JSON.stringify(task);
+  var raw = JSON.stringify({
+    completed: task.completed,
+  });
 
   var requestOptions = {
     method: "PUT",
@@ -133,7 +135,7 @@ export async function updateTaskById(task) {
   };
 
   const res = await fetch(
-    `https://api-nodejs-todolist.herokuapp.com/task/${task.id}`,
+    `https://api-nodejs-todolist.herokuapp.com/task/${task._id}`,
     requestOptions
   );
   const data = await res.json();
