@@ -7,7 +7,7 @@
  *
  * @copyRight COPYRIGHT © OSSTEM IMPLANT CO., LTD. ALL RIGHTS RESERVED.
  */
-import { createNamespacedHelpers } from "vuex-composition-helpers";
+import * as common from "./common";
 import taskApi from "@/api/taskApi";
 
 const NAMESPACE = "task";
@@ -27,17 +27,11 @@ const GetterType = Object.freeze({
 });
 
 const MutationType = Object.freeze({
-  RESET_STATE: "RESET_STATE",
-  SET_STATE: "SET_STATE",
-  SET_VIEW: "SET_VIEW",
-  SET_ALL_TASK: "SET_ALL_TASK",
-  SET_TASK: "SET_TASK",
+  ...common.MutationType,
 });
 
 const ActionType = Object.freeze({
-  RESET_STATE: "RESET_STATE",
-  SET_STATE: "SET_STATE",
-  SET_VIEW: "SET_VIEW",
+  ...common.ActionType,
   GET_ALL_TASK: "GET_ALL_TASK",
   SET_ALL_TASK: "SET_ALL_TASK",
   GET_TASK_BY_ID: "GET_TASK_BY_ID",
@@ -56,6 +50,7 @@ function getInitialState() {
     },
     /** @type {{ completed :boolean, _id: string, description: string, owner: string, createdAt: string, updatedAt: string, __v: number }} */
     [StateType.TASK]: null,
+    /** @type {{ completed :boolean, _id: string, description: string, owner: string, createdAt: string, updatedAt: string, __v: number }[]} */
     [StateType.LIST]: [],
     /** @type {'all' | 'finished' | 'unfinished'} */
     [StateType.FILTER]: "all",
@@ -86,75 +81,17 @@ const getters = {
 };
 
 const mutations = {
-  // 모든 Store 기능
-  [MutationType.RESET_STATE](state, payload) {
-    const initialState = getInitialState();
-    const initialStateKeys = Object.keys(initialState);
-    let resetTargetKeys = Array.isArray(payload)
-      ? payload.filter((x) => initialStateKeys.includes(x))
-      : initialStateKeys;
-
-    resetTargetKeys.forEach((resetTargetKey) => {
-      state[resetTargetKey] = initialState[resetTargetKey];
-    });
-  },
-  [MutationType.SET_STATE](state, payload) {
-    function isObject(value) {
-      return (
-        typeof value === "object" && !Array.isArray(value) && value !== null
-      );
-    }
-    function isEmpty(value) {
-      return Object.keys(value).length === 0;
-    }
-
-    const setTargetKeys = Object.keys(payload);
-
-    setTargetKeys.forEach((setTargetKey) => {
-      if (isObject(payload[setTargetKey]) && !isEmpty(payload[setTargetKey])) {
-        Object.assign(state[setTargetKey], payload[setTargetKey]);
-      } else {
-        state[setTargetKey] = payload[setTargetKey];
-      }
-    });
-  },
-  // 해당 Store 기능
-  [MutationType.SET_VIEW](state, payload) {
-    Object.keys(payload).forEach((key) => {
-      state[StateType.VIEW][key] = payload[key];
-    });
-  },
-  [MutationType.SET_ALL_TASK](state, payload) {
-    state[StateType.LIST] = payload;
-  },
-  [MutationType.SET_TASK](state, payload) {
-    state[StateType.TASK] = payload;
-  },
+  ...common.getMutations(getInitialState),
 };
 
 const actions = {
-  // 모든 Store 기능
-  async [ActionType.RESET_STATE](context, payload) {
-    context.commit(MutationType.RESET_STATE, payload);
-    return Promise.resolve();
-  },
-  async [ActionType.SET_STATE](context, payload) {
-    context.commit(MutationType.SET_STATE, payload);
-    return Promise.resolve();
-  },
-  // 해당 Store 기능
-  async [ActionType.SET_VIEW](context, payload) {
-    context.commit(MutationType.SET_VIEW, payload);
-    return Promise.resolve();
-  },
-  async [ActionType.SET_ALL_TASK](context, payload) {
-    context.commit(MutationType.SET_ALL_TASK, payload);
-    return Promise.resolve();
-  },
+  ...common.getActions(),
   async [ActionType.GET_ALL_TASK](context, payload) {
     try {
       const result = await taskApi.getAllTask();
-      context.commit(MutationType.SET_ALL_TASK, result.data);
+      context.commit(MutationType.SET_STATE, {
+        [StateType.LIST]: result.data,
+      });
       return Promise.resolve(result);
     } catch (error) {
       return Promise.reject(error);
@@ -163,7 +100,9 @@ const actions = {
   async [ActionType.GET_TASK_BY_ID](context, payload) {
     try {
       const result = await taskApi.getTaskById(payload.id);
-      context.commit(MutationType.SET_TASK, result.data);
+      context.commit(MutationType.SET_STATE, {
+        [StateType.TASK]: result.data,
+      });
       return Promise.resolve(result);
     } catch (error) {
       return Promise.reject(error);
@@ -195,21 +134,12 @@ const actions = {
   },
 };
 
-const useTaskStore = () => {
-  const { useState, useGetters, useActions } =
-    createNamespacedHelpers(NAMESPACE);
-
-  return {
-    StateType,
-    GetterType,
-    ActionType,
-    ...useState(Object.keys(StateType)),
-    ...useGetters(Object.keys(GetterType)),
-    ...useActions(Object.keys(ActionType)),
-  };
-};
-
-export { useTaskStore };
+export const useTaskStore = common.createUseStore(
+  NAMESPACE,
+  StateType,
+  GetterType,
+  ActionType
+);
 export default {
   namespaced: true,
   state,

@@ -9,7 +9,8 @@ const list = computed(() => store.state.task.LIST);
 const competedCount = computed(() => store.getters["task/COMPLETED_COUNT"]);
 
 // vuex 방법 - Actions
-const setAllTask = (payload) => store.dispatch("task/SET_ALL_TASK", payload);
+const setAllTask = (payload) =>
+  store.dispatch("task/SET_STATE", { LIST: payload });
 
 // ##################################################################################
 const taskStore = useTaskStore();
@@ -41,7 +42,9 @@ function onClickMethod2() {
     { id: 3, completed: false },
   ];
 
-  taskStore[taskStore.ActionType.SET_ALL_TASK](data);
+  taskStore[taskStore.ActionType.SET_STATE]({
+    [taskStore.StateType.LIST]: data,
+  });
 }
 </script>
 

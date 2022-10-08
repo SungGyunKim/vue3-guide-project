@@ -41,16 +41,20 @@ function onResetStateClick() {
 }
 
 function onAddClick() {
-  taskStore[taskStore.ActionType.SET_VIEW]({
-    visible: true,
-    id: null,
+  taskStore[taskStore.ActionType.SET_STATE]({
+    [taskStore.StateType.VIEW]: {
+      visible: true,
+      id: null,
+    },
   });
 }
 
 function onRowClick(item) {
-  taskStore[taskStore.ActionType.SET_VIEW]({
-    visible: true,
-    id: item._id,
+  taskStore[taskStore.ActionType.SET_STATE]({
+    [taskStore.StateType.VIEW]: {
+      visible: true,
+      id: item._id,
+    },
   });
 }
 
