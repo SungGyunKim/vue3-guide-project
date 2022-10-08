@@ -72,8 +72,8 @@ export function createUseStore(NAMESPACE, StateType, GetterType, ActionType) {
     const { useState, useGetters, useActions } =
       createNamespacedHelpers(NAMESPACE);
     const { RESET_STATE, PATCH_STATE } = useActions([
-      ActionType.RESET_STATE,
-      ActionType.PATCH_STATE,
+      _ActionType.RESET_STATE,
+      _ActionType.PATCH_STATE,
     ]);
 
     return {
