@@ -7,16 +7,25 @@
  *
  * @copyRight COPYRIGHT © OSSTEM IMPLANT CO., LTD. ALL RIGHTS RESERVED.
  */
+import store from "@/store";
 import { createNamespacedHelpers } from "vuex-composition-helpers";
 
-export const _MutationType = Object.freeze({
-  RESET_STATE: "RESET_STATE",
-  PATCH_STATE: "PATCH_STATE",
+/**
+ * @readonly
+ * @enum {string}
+ */
+const _MutationType = Object.freeze({
+  RESET_STATE: "_RESET_STATE",
+  PATCH_STATE: "_PATCH_STATE",
 });
 
-export const _ActionType = Object.freeze({
-  RESET_STATE: "RESET_STATE",
-  PATCH_STATE: "PATCH_STATE",
+/**
+ * @readonly
+ * @enum {string}
+ */
+const _ActionType = Object.freeze({
+  RESET_STATE: "_RESET_STATE",
+  PATCH_STATE: "_PATCH_STATE",
 });
 
 export function getMutations(getInitialState) {
@@ -68,13 +77,24 @@ export function getActions() {
 }
 
 export function createUseStore(NAMESPACE, StateType, GetterType, ActionType) {
-  return () => {
-    const { useState, useGetters, useActions } =
-      createNamespacedHelpers(NAMESPACE);
-    const { RESET_STATE, PATCH_STATE } = useActions([
-      _ActionType.RESET_STATE,
-      _ActionType.PATCH_STATE,
-    ]);
+  /**
+   * @typedef {Object} UseStore
+   * @property {(stateKeys: Array<S>=) => void} $reset - Store의 State를 초기값 상태로 되돌립니다.
+   * @property {(payload: Object) => void} $patch - Store의 State를 변경합니다.
+   */
+  /**
+   * Store의 Module을 Composition API에서 편안하게 사용할 수 있도록 합니다.
+   * @return {UseStore}
+   */
+  function _createUseStore() {
+    const { useState, useGetters, useActions } = createNamespacedHelpers(
+      store,
+      NAMESPACE
+    );
+    const {
+      [_ActionType.RESET_STATE]: _$reset,
+      [_ActionType.PATCH_STATE]: _$patch,
+    } = useActions([_ActionType.RESET_STATE, _ActionType.PATCH_STATE]);
 
     return {
       StateType,
@@ -84,13 +104,15 @@ export function createUseStore(NAMESPACE, StateType, GetterType, ActionType) {
       ...useGetters(Object.keys(GetterType)),
       ...useActions(Object.keys(ActionType)),
       async $reset(payload) {
-        await RESET_STATE(payload);
+        await _$reset(payload);
       },
       async $patch(payload) {
-        await PATCH_STATE(payload);
+        await _$patch(payload);
       },
     };
-  };
+  }
+
+  return _createUseStore;
 }
 
 function isObject(value) {

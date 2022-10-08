@@ -10,7 +10,7 @@ const competedCount = computed(() => store.getters["task/COMPLETED_COUNT"]);
 
 // vuex 방법 - Actions
 const setAllTask = (payload) =>
-  store.dispatch("task/PATCH_STATE", { LIST: payload });
+  store.dispatch("task/_PATCH_STATE", { LIST: payload });
 
 // ##################################################################################
 const taskStore = useTaskStore();
@@ -42,6 +42,8 @@ function onClickMethod2() {
     { id: 3, completed: false },
   ];
 
+  /** @deprecated common.js의 $patch로 대체합니다. */
+  console.warn("common.js의 $patch를 참고하세요.");
   taskStore["PATCH_STATE"]({
     [taskStore.StateType.LIST]: data,
   });

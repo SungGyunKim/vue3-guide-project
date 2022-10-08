@@ -83,7 +83,7 @@ const actions = {
   async [ActionType.GET_ALL_TASK](context, payload) {
     try {
       const result = await taskApi.getAllTask();
-      context.commit("PATCH_STATE", {
+      useTaskStore().$patch({
         [StateType.LIST]: result.data,
       });
       return Promise.resolve(result);
@@ -94,7 +94,7 @@ const actions = {
   async [ActionType.GET_TASK_BY_ID](context, payload) {
     try {
       const result = await taskApi.getTaskById(payload.id);
-      context.commit("PATCH_STATE", {
+      useTaskStore().$patch({
         [StateType.TASK]: result.data,
       });
       return Promise.resolve(result);
