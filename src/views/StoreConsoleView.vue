@@ -36,9 +36,9 @@
                   <button
                     type="button"
                     class="btn btn-primary"
-                    @click="onModuleSelectedToogleAllClick()"
+                    @click="onModuleSelectedToggleAllClick()"
                   >
-                    전체 {{ moduleSelectdAll ? "해제" : "선택" }}
+                    전체 {{ moduleSelectedAll ? "해제" : "선택" }}
                   </button>
                 </th>
                 <th scope="col" class="align-middle text-center button">
@@ -62,7 +62,7 @@
                   <button
                     type="button"
                     class="btn btn-primary"
-                    @click="onModuleSelectedToogleClick(moduleItem)"
+                    @click="onModuleSelectedToggleClick(moduleItem)"
                   >
                     {{ moduleItem.selected ? "해제" : "선택" }}
                   </button>
@@ -198,7 +198,7 @@ import { Vue3JsonEditor } from "vue3-json-editor";
 const store = useStore();
 
 // state
-const moduleSelectdAll = ref(true);
+const moduleSelectedAll = ref(true);
 const modules = ref([]);
 const payload = ref({});
 const result = ref({});
@@ -239,15 +239,15 @@ function selectedModuleFilter(it) {
   return selectedModuleIndex != -1 ? true : false;
 }
 
-function onModuleSelectedToogleAllClick() {
-  moduleSelectdAll.value = !moduleSelectdAll.value;
+function onModuleSelectedToggleAllClick() {
+  moduleSelectedAll.value = !moduleSelectedAll.value;
 
   modules.value.forEach(
-    (moduleItem) => (moduleItem.selected = moduleSelectdAll.value)
+    (moduleItem) => (moduleItem.selected = moduleSelectedAll.value)
   );
 }
 
-function onModuleSelectedToogleClick(moduleItem) {
+function onModuleSelectedToggleClick(moduleItem) {
   moduleItem.selected = !moduleItem.selected;
 }
 
