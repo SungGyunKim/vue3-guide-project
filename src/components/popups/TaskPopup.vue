@@ -70,7 +70,7 @@ function close() {
   taskData.value = initialState.taskData;
   taskDataState.value = initialState.taskDataState;
 
-  taskStore[taskStore.ActionType.SET_STATE]({
+  taskStore.$patch({
     [taskStore.StateType.TASK]: {},
     [taskStore.StateType.VIEW]: {
       visible: false,

@@ -22,19 +22,19 @@ const taskStore = useTaskStore();
  * 컴포넌트 이벤트 핸들러
  **********************************************************/
 function onFilterAllClick() {
-  taskStore[taskStore.ActionType.SET_STATE]({
+  taskStore.$patch({
     [taskStore.StateType.FILTER]: "all",
   });
 }
 
 function onFilterFinishedClick() {
-  taskStore[taskStore.ActionType.SET_STATE]({
+  taskStore.$patch({
     [taskStore.StateType.FILTER]: "finished",
   });
 }
 
 function onFilterUnfinishedClick() {
-  taskStore[taskStore.ActionType.SET_STATE]({
+  taskStore.$patch({
     [taskStore.StateType.FILTER]: "unfinished",
   });
 }

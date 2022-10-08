@@ -9,19 +9,19 @@
  */
 import { createNamespacedHelpers } from "vuex-composition-helpers";
 
-export const MutationType = Object.freeze({
+export const _MutationType = Object.freeze({
   RESET_STATE: "RESET_STATE",
-  SET_STATE: "SET_STATE",
+  PATCH_STATE: "PATCH_STATE",
 });
 
-export const ActionType = Object.freeze({
+export const _ActionType = Object.freeze({
   RESET_STATE: "RESET_STATE",
-  SET_STATE: "SET_STATE",
+  PATCH_STATE: "PATCH_STATE",
 });
 
 export function getMutations(getInitialState) {
   return {
-    [MutationType.RESET_STATE](state, payload) {
+    [_MutationType.RESET_STATE](state, payload) {
       const initialState = getInitialState();
       const initialStateKeys = Object.keys(initialState);
       let resetTargetKeys = Array.isArray(payload)
@@ -32,7 +32,7 @@ export function getMutations(getInitialState) {
         state[resetTargetKey] = initialState[resetTargetKey];
       });
     },
-    [MutationType.SET_STATE](state, payload) {
+    [_MutationType.PATCH_STATE](state, payload) {
       const stateKeys = Object.keys(payload);
 
       stateKeys.forEach((stateKey) => {
@@ -56,29 +56,41 @@ export function getMutations(getInitialState) {
 
 export function getActions() {
   return {
-    async [ActionType.RESET_STATE](context, payload) {
-      context.commit(MutationType.RESET_STATE, payload);
+    async [_ActionType.RESET_STATE](context, payload) {
+      context.commit(_MutationType.RESET_STATE, payload);
       return Promise.resolve();
     },
-    async [ActionType.SET_STATE](context, payload) {
-      context.commit(MutationType.SET_STATE, payload);
+    async [_ActionType.PATCH_STATE](context, payload) {
+      context.commit(_MutationType.PATCH_STATE, payload);
       return Promise.resolve();
     },
   };
 }
 
 export function createUseStore(NAMESPACE, StateType, GetterType, ActionType) {
-  const { useState, useGetters, useActions } =
-    createNamespacedHelpers(NAMESPACE);
+  return () => {
+    const { useState, useGetters, useActions } =
+      createNamespacedHelpers(NAMESPACE);
+    const { RESET_STATE, PATCH_STATE } = useActions([
+      ActionType.RESET_STATE,
+      ActionType.PATCH_STATE,
+    ]);
 
-  return () => ({
-    StateType,
-    GetterType,
-    ActionType,
-    ...useState(Object.keys(StateType)),
-    ...useGetters(Object.keys(GetterType)),
-    ...useActions(Object.keys(ActionType)),
-  });
+    return {
+      StateType,
+      GetterType,
+      ActionType,
+      ...useState(Object.keys(StateType)),
+      ...useGetters(Object.keys(GetterType)),
+      ...useActions(Object.keys(ActionType)),
+      async $reset(payload) {
+        await RESET_STATE(payload);
+      },
+      async $patch(payload) {
+        await PATCH_STATE(payload);
+      },
+    };
+  };
 }
 
 function isObject(value) {

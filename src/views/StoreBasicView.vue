@@ -10,7 +10,7 @@ const competedCount = computed(() => store.getters["task/COMPLETED_COUNT"]);
 
 // vuex 방법 - Actions
 const setAllTask = (payload) =>
-  store.dispatch("task/SET_STATE", { LIST: payload });
+  store.dispatch("task/PATCH_STATE", { LIST: payload });
 
 // ##################################################################################
 const taskStore = useTaskStore();
@@ -42,7 +42,20 @@ function onClickMethod2() {
     { id: 3, completed: false },
   ];
 
-  taskStore[taskStore.ActionType.SET_STATE]({
+  taskStore["PATCH_STATE"]({
+    [taskStore.StateType.LIST]: data,
+  });
+}
+
+function onClickMethod3() {
+  const data = [
+    { id: 1, completed: true },
+    { id: 2, completed: true },
+    { id: 3, completed: false },
+    { id: 4, completed: true },
+  ];
+
+  taskStore.$patch({
     [taskStore.StateType.LIST]: data,
   });
 }
@@ -50,24 +63,40 @@ function onClickMethod2() {
 
 <template>
   <main>
-    <h1>vuex 방법</h1>
-    <div>
-      <ul>
-        <li v-for="item in list" :key="item">{{ item }}</li>
-      </ul>
-    </div>
-    <div>{{ competedCount }}</div>
-    <button @click="onClickMethod1">SET_ALL_TASK</button>
-    <h1>vuex-composition-helpers 방법</h1>
-    <div>
-      <ul>
-        <li v-for="item in list2" :key="item">
-          {{ item }}
-        </li>
-      </ul>
-    </div>
-    <div>{{ taskStore[taskStore.GetterType.COMPLETED_COUNT] }}</div>
-    <button @click="onClickMethod2">SET_ALL_TASK</button>
+    <section>
+      <h1>vuex basic 방법</h1>
+      <div>
+        <ul>
+          <li v-for="item in list" :key="item">{{ item }}</li>
+        </ul>
+      </div>
+      <div>{{ competedCount }}</div>
+      <button @click="onClickMethod1">set task list</button>
+    </section>
+    <section>
+      <h1>vuex-composition-helpers 방법</h1>
+      <div>
+        <ul>
+          <li v-for="item in list2" :key="item">
+            {{ item }}
+          </li>
+        </ul>
+      </div>
+      <div>{{ taskStore[taskStore.GetterType.COMPLETED_COUNT] }}</div>
+      <button @click="onClickMethod2">set task list</button>
+    </section>
+    <section>
+      <h1>common</h1>
+      <div>
+        <ul>
+          <li v-for="item in list2" :key="item">
+            {{ item }}
+          </li>
+        </ul>
+      </div>
+      <div>{{ taskStore[taskStore.GetterType.COMPLETED_COUNT] }}</div>
+      <button @click="onClickMethod3">set task list</button>
+    </section>
   </main>
 </template>
 

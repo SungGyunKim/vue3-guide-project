@@ -28,7 +28,7 @@ onBeforeMount(async () => {
  * 컴포넌트 이벤트 핸들러
  **********************************************************/
 function onSetStateClick() {
-  taskStore[taskStore.ActionType.SET_STATE]({
+  taskStore.$patch({
     [taskStore.StateType.VIEW]: {
       visible: true,
       id: null,
@@ -37,11 +37,11 @@ function onSetStateClick() {
 }
 
 function onResetStateClick() {
-  taskStore[taskStore.ActionType.RESET_STATE]([taskStore.StateType.LIST]);
+  taskStore.$reset([taskStore.StateType.LIST]);
 }
 
 function onAddClick() {
-  taskStore[taskStore.ActionType.SET_STATE]({
+  taskStore.$patch({
     [taskStore.StateType.VIEW]: {
       visible: true,
       id: null,
@@ -50,7 +50,7 @@ function onAddClick() {
 }
 
 function onRowClick(item) {
-  taskStore[taskStore.ActionType.SET_STATE]({
+  taskStore.$patch({
     [taskStore.StateType.VIEW]: {
       visible: true,
       id: item._id,

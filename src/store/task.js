@@ -26,12 +26,9 @@ const GetterType = Object.freeze({
   FILTERED_LIST: "FILTERED_LIST",
 });
 
-const MutationType = Object.freeze({
-  ...common.MutationType,
-});
+const MutationType = Object.freeze({});
 
 const ActionType = Object.freeze({
-  ...common.ActionType,
   GET_ALL_TASK: "GET_ALL_TASK",
   SET_ALL_TASK: "SET_ALL_TASK",
   GET_TASK_BY_ID: "GET_TASK_BY_ID",
@@ -68,28 +65,25 @@ const getters = {
     return state[StateType.LIST].filter((item) => !item.completed).length;
   },
   [GetterType.FILTERED_LIST](state) {
-    let fileterdList = state[StateType.LIST];
+    let filteredList = state[StateType.LIST];
 
     if (state[StateType.FILTER] === "finished") {
-      fileterdList = state[StateType.LIST].filter((item) => item.completed);
+      filteredList = state[StateType.LIST].filter((item) => item.completed);
     } else if (state[StateType.FILTER] === "unfinished") {
-      fileterdList = state[StateType.LIST].filter((item) => !item.completed);
+      filteredList = state[StateType.LIST].filter((item) => !item.completed);
     }
 
-    return fileterdList;
+    return filteredList;
   },
 };
 
-const mutations = {
-  ...common.getMutations(getInitialState),
-};
+const mutations = {};
 
 const actions = {
-  ...common.getActions(),
   async [ActionType.GET_ALL_TASK](context, payload) {
     try {
       const result = await taskApi.getAllTask();
-      context.commit(MutationType.SET_STATE, {
+      context.commit("PATCH_STATE", {
         [StateType.LIST]: result.data,
       });
       return Promise.resolve(result);
@@ -100,7 +94,7 @@ const actions = {
   async [ActionType.GET_TASK_BY_ID](context, payload) {
     try {
       const result = await taskApi.getTaskById(payload.id);
-      context.commit(MutationType.SET_STATE, {
+      context.commit("PATCH_STATE", {
         [StateType.TASK]: result.data,
       });
       return Promise.resolve(result);
@@ -144,6 +138,6 @@ export default {
   namespaced: true,
   state,
   getters,
-  mutations,
-  actions,
+  mutations: Object.assign(mutations, common.getMutations(getInitialState)),
+  actions: Object.assign(actions, common.getActions()),
 };
