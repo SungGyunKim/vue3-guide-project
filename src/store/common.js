@@ -97,7 +97,6 @@ export function createUseStore(
   /**
    * @template T, ST, GT, AT
    * @typedef {Object} UseStore
-   * @property {T} state
    * @property {ST} StateType - Store의 State 유형
    * @property {GT} GetterType - Store의 Getter 유형
    * @property {AT} ActionType - Store의 Action 유형

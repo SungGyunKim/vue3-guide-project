@@ -74,6 +74,7 @@ function getInitialState() {
 }
 
 const getters = {
+  /** @param { state } state */
   [GetterType.TOTAL_COUNT](state) {
     return state[StateType.LIST].length;
   },
