@@ -23,19 +23,19 @@ const taskStore = useTaskStore();
  **********************************************************/
 function onFilterAllClick() {
   taskStore.$patch({
-    [taskStore.StateType.FILTER]: "all",
+    FILTER: "all",
   });
 }
 
 function onFilterFinishedClick() {
   taskStore.$patch({
-    [taskStore.StateType.FILTER]: "finished",
+    FILTER: "finished",
   });
 }
 
 function onFilterUnfinishedClick() {
   taskStore.$patch({
-    [taskStore.StateType.FILTER]: "unfinished",
+    FILTER: "unfinished",
   });
 }
 

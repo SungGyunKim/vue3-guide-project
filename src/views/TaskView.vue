@@ -29,7 +29,7 @@ onBeforeMount(async () => {
  **********************************************************/
 function onSetStateClick() {
   taskStore.$patch({
-    [taskStore.StateType.VIEW]: {
+    VIEW: {
       visible: true,
       id: null,
     },
@@ -42,7 +42,7 @@ function onResetStateClick() {
 
 function onAddClick() {
   taskStore.$patch({
-    [taskStore.StateType.VIEW]: {
+    VIEW: {
       visible: true,
       id: null,
     },
@@ -51,7 +51,7 @@ function onAddClick() {
 
 function onRowClick(item) {
   taskStore.$patch({
-    [taskStore.StateType.VIEW]: {
+    VIEW: {
       visible: true,
       id: item._id,
     },

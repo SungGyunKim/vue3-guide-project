@@ -149,6 +149,7 @@ const actions = {
 
 export const useTaskStore = common.createUseStore(
   NAMESPACE,
+  state,
   StateType,
   GetterType,
   ActionType

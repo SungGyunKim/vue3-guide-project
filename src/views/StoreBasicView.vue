@@ -58,7 +58,7 @@ function onClickMethod3() {
   ];
 
   taskStore.$patch({
-    [taskStore.StateType.LIST]: data,
+    LIST: data,
   });
 }
 </script>
