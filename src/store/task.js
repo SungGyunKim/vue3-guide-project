@@ -7,11 +7,18 @@
  *
  * @copyRight COPYRIGHT © OSSTEM IMPLANT CO., LTD. ALL RIGHTS RESERVED.
  */
+/**
+ * @typedef {import("@/model/index").Task} Task
+ */
 import * as common from "./common";
 import taskApi from "@/api/taskApi";
 
 const NAMESPACE = "task";
 
+/**
+ * @readonly
+ * @enum {string}
+ */
 const StateType = Object.freeze({
   VIEW: "VIEW",
   LIST: "LIST",
@@ -19,6 +26,10 @@ const StateType = Object.freeze({
   TASK: "TASK",
 });
 
+/**
+ * @readonly
+ * @enum {string}
+ */
 const GetterType = Object.freeze({
   TOTAL_COUNT: "TOTAL_COUNT",
   COMPLETED_COUNT: "COMPLETED_COUNT",
@@ -26,8 +37,16 @@ const GetterType = Object.freeze({
   FILTERED_LIST: "FILTERED_LIST",
 });
 
+/**
+ * @readonly
+ * @enum {string}
+ */
 const MutationType = Object.freeze({});
 
+/**
+ * @readonly
+ * @enum {string}
+ */
 const ActionType = Object.freeze({
   GET_ALL_TASK: "GET_ALL_TASK",
   SET_ALL_TASK: "SET_ALL_TASK",
@@ -45,9 +64,9 @@ function getInitialState() {
       visible: false,
       id: null,
     },
-    /** @type {{ completed :boolean, _id: string, description: string, owner: string, createdAt: string, updatedAt: string, __v: number }} */
+    /** @type {Task} */
     [StateType.TASK]: null,
-    /** @type {{ completed :boolean, _id: string, description: string, owner: string, createdAt: string, updatedAt: string, __v: number }[]} */
+    /** @type {Task[]} */
     [StateType.LIST]: [],
     /** @type {'all' | 'finished' | 'unfinished'} */
     [StateType.FILTER]: "all",

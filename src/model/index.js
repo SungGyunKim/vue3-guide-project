@@ -1,34 +1,12 @@
-/** @type { { completed :boolean, _id: string, description: string, owner: string, createdAt: string, updatedAt: string, __v: number } } */
-export const Task = {
-  /**
-   * 완료여부
-   * @type {boolean}
-   **/
-  completed: false,
-  /**
-   * ID
-   * @type {string}
-   **/
-  _id: "",
-  /**
-   * 설명
-   * @type {string}
-   **/
-  description: "",
-  /**
-   * 소유자
-   * @type {string}
-   **/
-  owner: "",
-  /**
-   * 생성일시
-   * @type {string}
-   **/
-  createdAt: "",
-  /**
-   * 수정일시
-   * @type {string}
-   **/
-  updatedAt: "",
-  __v: 0,
-};
+/**
+ * @typedef {Object} Task - 해야할 일
+ * @property {String} _id - ID
+ * @property {Boolean} completed - 완료여부
+ * @property {String} description - 설명
+ * @property {String} owner - 소유자
+ * @property {String} createdAt - 생성일시
+ * @property {String} updatedAt - 수정일시
+ * @property {String} updatedAt - 소유자
+ * @property {Number} __v -  ??
+ */
+export default {};
