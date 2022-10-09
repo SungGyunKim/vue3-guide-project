@@ -95,12 +95,12 @@ export function createUseStore(
   ActionType
 ) {
   /**
-   * @template T, ST, GT, AT
+   * @template S, ST, GT, AT
    * @typedef {Object} UseStore
    * @property {ST} StateType - Store의 State 유형
    * @property {GT} GetterType - Store의 Getter 유형
    * @property {AT} ActionType - Store의 Action 유형
-   * @property {(state: T) => void} $patch - Store의 State를 변경합니다.
+   * @property {(state: S) => void} $patch - Store의 State를 변경합니다.
    * @property {(stateKeys?: Array<ST>) => void} $reset - Store의 State를 전체 혹은 일부를 초기값 상태로 되돌립니다.
    */
   /**
@@ -116,8 +116,7 @@ export function createUseStore(
       [_ActionType.RESET_STATE]: _$reset,
       [_ActionType.PATCH_STATE]: _$patch,
     } = useActions([_ActionType.RESET_STATE, _ActionType.PATCH_STATE]);
-
-    return {
+    let useStoreInstance = {
       StateType,
       GetterType,
       ActionType,
@@ -131,6 +130,8 @@ export function createUseStore(
         await _$reset(stateKeys);
       },
     };
+
+    return useStoreInstance;
   }
 
   return _createUseStore;
