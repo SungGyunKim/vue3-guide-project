@@ -47,21 +47,15 @@ function onFilterUnfinishedClick() {
   <div>
     <b-button variant="secondary" class="me-2" @click="onFilterAllClick">
       전체
-      <b-badge variant="light">{{
-        taskStore[taskStore.GetterType.TOTAL_COUNT]
-      }}</b-badge>
+      <b-badge variant="light">{{ taskStore.TOTAL_COUNT }}</b-badge>
     </b-button>
     <b-button variant="primary" class="me-2" @click="onFilterFinishedClick">
       완료
-      <b-badge variant="light">{{
-        taskStore[taskStore.GetterType.COMPLETED_COUNT]
-      }}</b-badge>
+      <b-badge variant="light">{{ taskStore.COMPLETED_COUNT }}</b-badge>
     </b-button>
     <b-button variant="danger" @click="onFilterUnfinishedClick">
       미완료
-      <b-badge variant="light">{{
-        taskStore[taskStore.GetterType.INCOMPLETE_COUNT]
-      }}</b-badge>
+      <b-badge variant="light">{{ taskStore.INCOMPLETE_COUNT }}</b-badge>
     </b-button>
   </div>
 </template>

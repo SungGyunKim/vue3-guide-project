@@ -84,7 +84,7 @@ function onClickMethod3() {
           </li>
         </ul>
       </div>
-      <div>{{ taskStore[taskStore.GetterType.COMPLETED_COUNT] }}</div>
+      <div>{{ taskStore.COMPLETED_COUNT }}</div>
       <button @click="onClickMethod2">set task list</button>
     </section>
     <section>
@@ -96,7 +96,7 @@ function onClickMethod3() {
           </li>
         </ul>
       </div>
-      <div>{{ taskStore[taskStore.GetterType.COMPLETED_COUNT] }}</div>
+      <div>{{ taskStore.COMPLETED_COUNT }}</div>
       <button @click="onClickMethod3">set task list</button>
     </section>
   </main>

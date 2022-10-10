@@ -11,6 +11,7 @@ import store from "@/store";
 import { createNamespacedHelpers } from "vuex-composition-helpers";
 
 /**
+ * @private
  * @readonly
  * @enum {string}
  */
@@ -20,6 +21,7 @@ const _MutationType = Object.freeze({
 });
 
 /**
+ * @private
  * @readonly
  * @enum {string}
  */
@@ -96,6 +98,7 @@ export function createUseStore(
 ) {
   /**
    * @template S, ST, GT, AT
+   * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractGetterTypes<GT> } ComputedRefGetters
    * @typedef {Object} UseStore
    * @property {ST} StateType - Store의 State 유형
    * @property {GT} GetterType - Store의 Getter 유형
@@ -105,7 +108,6 @@ export function createUseStore(
    */
   /**
    * Store의 Module을 Composition API에서 편안하게 사용할 수 있도록 합니다.
-   * @return {UseStore<S, ST, GT, AT>} Store의 Module을 다루는 객체
    */
   function _createUseStore() {
     const { useState, useGetters, useActions } = createNamespacedHelpers(
@@ -116,6 +118,7 @@ export function createUseStore(
       [_ActionType.RESET_STATE]: _$reset,
       [_ActionType.PATCH_STATE]: _$patch,
     } = useActions([_ActionType.RESET_STATE, _ActionType.PATCH_STATE]);
+    /** @type {UseStore<S, ST, GT, AT> & ComputedRefGetters<S, ST, GT, AT> } */
     let useStoreInstance = {
       StateType,
       GetterType,
