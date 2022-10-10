@@ -8,7 +8,8 @@
  * @copyRight COPYRIGHT © OSSTEM IMPLANT CO., LTD. ALL RIGHTS RESERVED.
  */
 /**
- * @typedef {import("@/model/index").Task} Task
+ * @typedef { import("@@/node_modules/vuex/types/index").GetterTree<state, any> } GetterTree
+ * @typedef { import("@/model/index").Task } Task
  */
 import * as common from "./common";
 import taskApi from "@/api/taskApi";
@@ -73,24 +74,24 @@ function getInitialState() {
   };
 }
 
+/** @type { GetterTree } */
 const getters = {
-  /** @param { state } state */
   [GetterType.TOTAL_COUNT](state) {
-    return state[StateType.LIST].length;
+    return state.LIST.length;
   },
   [GetterType.COMPLETED_COUNT](state) {
-    return state[StateType.LIST].filter((item) => item.completed).length;
+    return state.LIST.filter((item) => item.completed).length;
   },
   [GetterType.INCOMPLETE_COUNT](state) {
-    return state[StateType.LIST].filter((item) => !item.completed).length;
+    return state.LIST.filter((item) => !item.completed).length;
   },
   [GetterType.FILTERED_LIST](state) {
-    let filteredList = state[StateType.LIST];
+    let filteredList = state.LIST;
 
-    if (state[StateType.FILTER] === "finished") {
-      filteredList = state[StateType.LIST].filter((item) => item.completed);
-    } else if (state[StateType.FILTER] === "unfinished") {
-      filteredList = state[StateType.LIST].filter((item) => !item.completed);
+    if (state.FILTER === "finished") {
+      filteredList = state.LIST.filter((item) => item.completed);
+    } else if (state.FILTER === "unfinished") {
+      filteredList = state.LIST.filter((item) => !item.completed);
     }
 
     return filteredList;
@@ -99,6 +100,7 @@ const getters = {
 
 const mutations = {};
 
+/** @type { Module } */
 const actions = {
   async [ActionType.GET_ALL_TASK](context, payload) {
     try {
@@ -155,6 +157,7 @@ export const useTaskStore = common.createUseStore(
   GetterType,
   ActionType
 );
+
 export default {
   namespaced: true,
   state,
