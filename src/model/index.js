@@ -6,7 +6,6 @@
  * @property {String} owner - 소유자
  * @property {String} createdAt - 생성일시
  * @property {String} updatedAt - 수정일시
- * @property {String} updatedAt - 소유자
  * @property {Number} __v -  ??
  */
 export default {};
