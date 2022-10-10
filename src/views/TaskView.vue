@@ -21,7 +21,7 @@ const { FILTERED_LIST } = taskStore;
  * 컴포넌트 라이프사이클 훅
  **********************************************************/
 onBeforeMount(async () => {
-  await taskStore[taskStore.ActionType.GET_ALL_TASK]();
+  await taskStore.GET_ALL_TASK();
 });
 
 /**********************************************************

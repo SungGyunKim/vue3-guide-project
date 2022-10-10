@@ -33,7 +33,7 @@ onUpdated(async () => {});
  **********************************************************/
 async function onModalShow() {
   if (VIEW.value.id) {
-    await taskStore[taskStore.ActionType.GET_TASK_BY_ID]({
+    await taskStore.GET_TASK_BY_ID({
       id: VIEW.value.id,
     });
     taskData.value = { ...TASK.value };
@@ -42,19 +42,19 @@ async function onModalShow() {
 
 async function onSaveClick() {
   if (VIEW.value.id) {
-    await taskStore[taskStore.ActionType.UPDATE_TASK_BY_ID](taskData.value);
+    await taskStore.UPDATE_TASK_BY_ID(taskData.value);
   } else {
-    await taskStore[taskStore.ActionType.ADD_TASK](taskData.value);
+    await taskStore.ADD_TASK(taskData.value);
   }
 
-  await taskStore[taskStore.ActionType.GET_ALL_TASK]();
+  await taskStore.GET_ALL_TASK();
 
   close();
 }
 
 async function onDeleteClick() {
-  await taskStore[taskStore.ActionType.DELETE_TASK_BY_ID](taskData.value._id);
-  await taskStore[taskStore.ActionType.GET_ALL_TASK]();
+  await taskStore.DELETE_TASK_BY_ID(taskData.value._id);
+  await taskStore.GET_ALL_TASK();
 
   close();
 }

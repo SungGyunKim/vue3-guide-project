@@ -79,12 +79,16 @@ export function getActions() {
 }
 
 /**
- * @template S - State의 제네릭
+ * @template S - state의 제네릭
+ * @template G - getters의 제네릭
+ * @template A - actions의 제네릭
  * @template ST - StateType의 제네릭
  * @template GT - GetterType의 제네릭
  * @template AT - ActionType의 제네릭
  * @param {string} NAMESPACE - Store의 네임스페이스
- * @param {S} state - Store의 State
+ * @param {S} state - Store의 state
+ * @param {G} getters - Store의 getters
+ * @param {A} actions - Store의 actions
  * @param {ST} StateType - Store의 State 유형
  * @param {GT} GetterType - Store의 Getter 유형
  * @param {AT} ActionType - Store의 Action 유형
@@ -92,18 +96,21 @@ export function getActions() {
 export function createUseStore(
   NAMESPACE,
   state,
+  getters,
+  actions,
   StateType,
   GetterType,
   ActionType
 ) {
   /**
-   * @template S, ST, GT, AT
-   * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ComputedRefTypes<ST> } ComputedRefStates
+   * @template S, G, A, ST, GT, AT
+   * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ComputedRefTypes<S> } ComputedRefStates
    * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractGetterTypes<GT> } ComputedRefGetters
+   * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractTypes<A, (payload: any) => Promise<any>> } ExtractTypesActions
    * @typedef {Object} UseStore
-   * @property {ST} StateType - Store의 State 유형
-   * @property {GT} GetterType - Store의 Getter 유형
-   * @property {AT} ActionType - Store의 Action 유형
+   * //@property {ST} StateType - Store의 State 유형
+   * //@property {GT} GetterType - Store의 Getter 유형
+   * //@property {AT} ActionType - Store의 Action 유형
    * @property {(state: S) => void} $patch - Store의 State를 변경합니다.
    * @property {(stateKeys?: Array<ST>) => void} $reset - Store의 State를 전체 혹은 일부를 초기값 상태로 되돌립니다.
    */
@@ -119,7 +126,7 @@ export function createUseStore(
       [_ActionType.RESET_STATE]: _$reset,
       [_ActionType.PATCH_STATE]: _$patch,
     } = useActions([_ActionType.RESET_STATE, _ActionType.PATCH_STATE]);
-    /** @type {UseStore<S, ST, GT, AT> & ComputedRefStates<S, ST, GT, AT> & ComputedRefGetters<S, ST, GT, AT> } */
+    /** @type {UseStore<S, G, A, ST, GT, AT> & ComputedRefStates<S, G, A, ST, GT, AT> & ComputedRefGetters<S, G, A, ST, GT, AT> & ExtractTypesActions<S, G, A, ST, GT, AT> } */
     let useStoreInstance = {
       StateType,
       GetterType,

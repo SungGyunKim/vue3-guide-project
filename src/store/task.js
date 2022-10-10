@@ -74,7 +74,6 @@ function getInitialState() {
   };
 }
 
-/** @type { GetterTree } */
 const getters = {
   [GetterType.TOTAL_COUNT](state) {
     return state.LIST.length;
@@ -152,6 +151,8 @@ const actions = {
 export const useTaskStore = common.createUseStore(
   NAMESPACE,
   state,
+  getters,
+  actions,
   StateType,
   GetterType,
   ActionType
