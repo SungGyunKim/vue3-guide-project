@@ -98,6 +98,7 @@ export function createUseStore(
 ) {
   /**
    * @template S, ST, GT, AT
+   * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ComputedRefTypes<ST> } ComputedRefStates
    * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractGetterTypes<GT> } ComputedRefGetters
    * @typedef {Object} UseStore
    * @property {ST} StateType - Store의 State 유형
@@ -118,7 +119,7 @@ export function createUseStore(
       [_ActionType.RESET_STATE]: _$reset,
       [_ActionType.PATCH_STATE]: _$patch,
     } = useActions([_ActionType.RESET_STATE, _ActionType.PATCH_STATE]);
-    /** @type {UseStore<S, ST, GT, AT> & ComputedRefGetters<S, ST, GT, AT> } */
+    /** @type {UseStore<S, ST, GT, AT> & ComputedRefStates<S, ST, GT, AT> & ComputedRefGetters<S, ST, GT, AT> } */
     let useStoreInstance = {
       StateType,
       GetterType,
