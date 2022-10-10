@@ -100,7 +100,6 @@ const getters = {
 
 const mutations = {};
 
-/** @type { Module } */
 const actions = {
   async [ActionType.GET_ALL_TASK](context, payload) {
     try {
