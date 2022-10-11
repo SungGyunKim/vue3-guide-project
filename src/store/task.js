@@ -20,17 +20,6 @@ const NAMESPACE = "task";
  * @readonly
  * @enum {string}
  */
-const StateType = Object.freeze({
-  VIEW: "VIEW",
-  LIST: "LIST",
-  FILTER: "FILTER",
-  TASK: "TASK",
-});
-
-/**
- * @readonly
- * @enum {string}
- */
 const GetterType = Object.freeze({
   TOTAL_COUNT: "TOTAL_COUNT",
   COMPLETED_COUNT: "COMPLETED_COUNT",
@@ -48,36 +37,36 @@ const state = getInitialState();
 
 function getInitialState() {
   return {
-    [StateType.VIEW]: {
+    view: {
       visible: false,
       id: null,
     },
     /** @type {Task} */
-    [StateType.TASK]: null,
+    task: null,
     /** @type {Task[]} */
-    [StateType.LIST]: [],
+    list: [],
     /** @type {'all' | 'finished' | 'unfinished'} */
-    [StateType.FILTER]: "all",
+    filter: "all",
   };
 }
 
 const getters = {
   [GetterType.TOTAL_COUNT](state) {
-    return state.LIST.length;
+    return state.list.length;
   },
   [GetterType.COMPLETED_COUNT](state) {
-    return state.LIST.filter((item) => item.completed).length;
+    return state.list.filter((item) => item.completed).length;
   },
   [GetterType.INCOMPLETE_COUNT](state) {
-    return state.LIST.filter((item) => !item.completed).length;
+    return state.list.filter((item) => !item.completed).length;
   },
   [GetterType.FILTERED_LIST](state) {
-    let filteredList = state.LIST;
+    let filteredList = state.list;
 
     if (state.FILTER === "finished") {
-      filteredList = state.LIST.filter((item) => item.completed);
+      filteredList = state.list.filter((item) => item.completed);
     } else if (state.FILTER === "unfinished") {
-      filteredList = state.LIST.filter((item) => !item.completed);
+      filteredList = state.list.filter((item) => !item.completed);
     }
 
     return filteredList;
@@ -91,7 +80,7 @@ const actions = {
     try {
       const result = await taskApi.getAllTask();
       useTaskStore().$patch({
-        [StateType.LIST]: result.data,
+        list: result.data,
       });
       return Promise.resolve(result);
     } catch (error) {
@@ -102,7 +91,7 @@ const actions = {
     try {
       const result = await taskApi.getTaskById(payload.id);
       useTaskStore().$patch({
-        [StateType.TASK]: result.data,
+        task: result.data,
       });
       return Promise.resolve(result);
     } catch (error) {
@@ -140,7 +129,6 @@ export const useTaskStore = common.createUseStore(
   state,
   getters,
   actions,
-  StateType,
   GetterType
 );
 

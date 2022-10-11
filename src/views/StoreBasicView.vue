@@ -44,8 +44,8 @@ function onClickMethod2() {
 
   /** @deprecated common.js의 $patch로 대체합니다. */
   console.warn("common.js의 $patch를 참고하세요.");
-  taskStore["PATCH_STATE"]({
-    [taskStore.StateType.LIST]: data,
+  taskStore["_$patch"]({
+    list: data,
   });
 }
 

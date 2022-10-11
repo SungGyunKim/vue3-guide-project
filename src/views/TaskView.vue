@@ -37,7 +37,7 @@ function onSetStateClick() {
 }
 
 function onResetStateClick() {
-  taskStore.$reset([taskStore.StateType.LIST]);
+  taskStore.$reset(["list"]);
 }
 
 function onAddClick() {
