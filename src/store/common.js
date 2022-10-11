@@ -84,14 +84,12 @@ export function getActions() {
  * @template A - actions의 제네릭
  * @template ST - StateType의 제네릭
  * @template GT - GetterType의 제네릭
- * @template AT - ActionType의 제네릭
  * @param {string} NAMESPACE - Store의 네임스페이스
  * @param {S} state - Store의 state
  * @param {G} getters - Store의 getters
  * @param {A} actions - Store의 actions
  * @param {ST} StateType - Store의 State 유형
  * @param {GT} GetterType - Store의 Getter 유형
- * @param {AT} ActionType - Store의 Action 유형
  */
 export function createUseStore(
   NAMESPACE,
@@ -99,18 +97,16 @@ export function createUseStore(
   getters,
   actions,
   StateType,
-  GetterType,
-  ActionType
+  GetterType
 ) {
   /**
-   * @template S, G, A, ST, GT, AT
+   * @template S, G, A, ST, GT
    * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ComputedRefTypes<S> } ComputedRefStates
    * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractGetterTypes<GT> } ComputedRefGetters
    * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractTypes<A, (payload: any) => Promise<any>> } ExtractTypesActions
    * @typedef {Object} UseStore
    * //@property {ST} StateType - Store의 State 유형
    * //@property {GT} GetterType - Store의 Getter 유형
-   * //@property {AT} ActionType - Store의 Action 유형
    * @property {(state: S) => void} $patch - Store의 State를 변경합니다.
    * @property {(stateKeys?: Array<ST>) => void} $reset - Store의 State를 전체 혹은 일부를 초기값 상태로 되돌립니다.
    */
@@ -126,14 +122,13 @@ export function createUseStore(
       [_ActionType.RESET_STATE]: _$reset,
       [_ActionType.PATCH_STATE]: _$patch,
     } = useActions([_ActionType.RESET_STATE, _ActionType.PATCH_STATE]);
-    /** @type {UseStore<S, G, A, ST, GT, AT> & ComputedRefStates<S, G, A, ST, GT, AT> & ComputedRefGetters<S, G, A, ST, GT, AT> & ExtractTypesActions<S, G, A, ST, GT, AT> } */
+    /** @type {UseStore<S, G, A, ST, GT> & ComputedRefStates<S, G, A, ST, GT> & ComputedRefGetters<S, G, A, ST, GT> & ExtractTypesActions<S, G, A, ST, GT> } */
     let useStoreInstance = {
       StateType,
       GetterType,
-      ActionType,
       ...useState(Object.keys(StateType)),
       ...useGetters(Object.keys(GetterType)),
-      ...useActions(Object.keys(ActionType)),
+      ...useActions(Object.keys(actions)),
       async $patch(state) {
         await _$patch(state);
       },

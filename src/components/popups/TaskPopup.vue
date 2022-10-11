@@ -33,7 +33,7 @@ onUpdated(async () => {});
  **********************************************************/
 async function onModalShow() {
   if (VIEW.value.id) {
-    await taskStore.GET_TASK_BY_ID({
+    await taskStore.getTaskById({
       id: VIEW.value.id,
     });
     taskData.value = { ...TASK.value };
@@ -42,19 +42,19 @@ async function onModalShow() {
 
 async function onSaveClick() {
   if (VIEW.value.id) {
-    await taskStore.UPDATE_TASK_BY_ID(taskData.value);
+    await taskStore.updateTaskById(taskData.value);
   } else {
-    await taskStore.ADD_TASK(taskData.value);
+    await taskStore.addTask(taskData.value);
   }
 
-  await taskStore.GET_ALL_TASK();
+  await taskStore.getAllTask();
 
   close();
 }
 
 async function onDeleteClick() {
-  await taskStore.DELETE_TASK_BY_ID(taskData.value._id);
-  await taskStore.GET_ALL_TASK();
+  await taskStore.deleteTaskById(taskData.value._id);
+  await taskStore.getAllTask();
 
   close();
 }
@@ -91,7 +91,7 @@ function close() {
     <!-- title area -->
     <template #title> Task {{ VIEW.id ? "수정" : "등록" }} 팝업 </template>
     <!-- content area -->
-    <template #default="">
+    <template #default>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <!-- Task ID -->
         <b-form-group label="Task ID" label-for="task-id-input" v-if="VIEW.id">

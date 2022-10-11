@@ -44,19 +44,6 @@ const GetterType = Object.freeze({
  */
 const MutationType = Object.freeze({});
 
-/**
- * @readonly
- * @enum {string}
- */
-const ActionType = Object.freeze({
-  GET_ALL_TASK: "GET_ALL_TASK",
-  SET_ALL_TASK: "SET_ALL_TASK",
-  GET_TASK_BY_ID: "GET_TASK_BY_ID",
-  ADD_TASK: "ADD_TASK",
-  UPDATE_TASK_BY_ID: "UPDATE_TASK_BY_ID",
-  DELETE_TASK_BY_ID: "DELETE_TASK_BY_ID",
-});
-
 const state = getInitialState();
 
 function getInitialState() {
@@ -100,7 +87,7 @@ const getters = {
 const mutations = {};
 
 const actions = {
-  async [ActionType.GET_ALL_TASK](context, payload) {
+  async getAllTask(context, payload) {
     try {
       const result = await taskApi.getAllTask();
       useTaskStore().$patch({
@@ -111,7 +98,7 @@ const actions = {
       return Promise.reject(error);
     }
   },
-  async [ActionType.GET_TASK_BY_ID](context, payload) {
+  async getTaskById(context, payload) {
     try {
       const result = await taskApi.getTaskById(payload.id);
       useTaskStore().$patch({
@@ -122,7 +109,7 @@ const actions = {
       return Promise.reject(error);
     }
   },
-  async [ActionType.ADD_TASK](context, payload) {
+  async addTask(context, payload) {
     try {
       const result = await taskApi.addTask(payload);
       return Promise.resolve(result);
@@ -130,7 +117,7 @@ const actions = {
       return Promise.reject(error);
     }
   },
-  async [ActionType.UPDATE_TASK_BY_ID](context, payload) {
+  async updateTaskById(context, payload) {
     try {
       const result = await taskApi.updateTaskById(payload);
       return Promise.resolve(result);
@@ -138,7 +125,7 @@ const actions = {
       return Promise.reject(error);
     }
   },
-  async [ActionType.DELETE_TASK_BY_ID](context, payload) {
+  async deleteTaskById(context, payload) {
     try {
       const result = await taskApi.deleteTaskById(payload);
       return Promise.resolve(result);
@@ -154,8 +141,7 @@ export const useTaskStore = common.createUseStore(
   getters,
   actions,
   StateType,
-  GetterType,
-  ActionType
+  GetterType
 );
 
 export default {
