@@ -35,9 +35,21 @@ export function getMutations(getInitialState) {
     [_MutationType.RESET_STATE](state, payload) {
       const initialState = getInitialState();
       const initialStateKeys = Object.keys(initialState);
-      let resetTargetKeys = Array.isArray(payload)
-        ? payload.filter((x) => initialStateKeys.includes(x))
-        : initialStateKeys;
+      let resetTargetKeys = [];
+
+      // resetTarget 설정
+      if (payload === undefined) {
+        resetTargetKeys = initialStateKeys;
+      } else if (typeof payload === "string" || payload instanceof String) {
+        resetTargetKeys.push(payload);
+      } else if (Array.isArray(payload)) {
+        resetTargetKeys = payload;
+      }
+
+      // resetTarget 존재하는 것만 추출
+      resetTargetKeys = resetTargetKeys.filter((x) =>
+        initialStateKeys.includes(x)
+      );
 
       resetTargetKeys.forEach((resetTargetKey) => {
         state[resetTargetKey] = initialState[resetTargetKey];
@@ -98,7 +110,7 @@ export function createUseStore(NAMESPACE, state, getters, actions, GetterType) {
    * @typedef {Object} UseStore
    * //@property {GT} GetterType - Store의 Getter 유형
    * @property {(state: S) => void} $patch - Store의 State를 변경합니다.
-   * @property {(stateKeys?: [keyof S]) => void} $reset - Store의 State를 전체 혹은 일부를 초기값 상태로 되돌립니다.
+   * @property {(stateKeys?: [keyof S] | keyof S) => void} $reset - Store의 State를 전체 혹은 일부를 초기값 상태로 되돌립니다.
    */
   /**
    * Store의 Module을 Composition API에서 편안하게 사용할 수 있도록 합니다.
@@ -118,11 +130,11 @@ export function createUseStore(NAMESPACE, state, getters, actions, GetterType) {
       ...useState(Object.keys(state)),
       ...useGetters(Object.keys(GetterType)),
       ...useActions(Object.keys(actions)),
-      async $patch(state) {
-        await _$patch(state);
-      },
       async $reset(stateKeys) {
         await _$reset(stateKeys);
+      },
+      async $patch(state) {
+        await _$patch(state);
       },
     };
 
