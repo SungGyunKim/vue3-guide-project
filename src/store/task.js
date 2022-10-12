@@ -27,12 +27,6 @@ const GetterType = Object.freeze({
   FILTERED_LIST: "FILTERED_LIST",
 });
 
-/**
- * @readonly
- * @enum {string}
- */
-const MutationType = Object.freeze({});
-
 const state = getInitialState();
 
 function getInitialState() {
