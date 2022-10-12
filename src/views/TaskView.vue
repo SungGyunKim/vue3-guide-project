@@ -15,7 +15,7 @@ defineExpose({});
  * 컴포넌트 state
  **********************************************************/
 const taskStore = useTaskStore();
-const { FILTERED_LIST } = taskStore;
+const { filteredList } = taskStore;
 
 /**********************************************************
  * 컴포넌트 라이프사이클 훅
@@ -29,7 +29,7 @@ onBeforeMount(async () => {
  **********************************************************/
 function onSetStateClick() {
   taskStore.$patch({
-    VIEW: {
+    view: {
       visible: true,
       id: null,
     },
@@ -42,7 +42,7 @@ function onResetStateClick() {
 
 function onAddClick() {
   taskStore.$patch({
-    VIEW: {
+    view: {
       visible: true,
       id: null,
     },
@@ -51,7 +51,7 @@ function onAddClick() {
 
 function onRowClick(item) {
   taskStore.$patch({
-    VIEW: {
+    view: {
       visible: true,
       id: item._id,
     },
@@ -83,7 +83,7 @@ function onRowClick(item) {
           striped
           hover
           sticky-header="true"
-          :items="FILTERED_LIST"
+          :items="filteredList"
           @row-clicked="onRowClick"
           responsive="lg"
         ></b-table>

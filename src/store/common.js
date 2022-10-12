@@ -37,7 +37,7 @@ export function getMutations(getInitialState) {
       const initialStateKeys = Object.keys(initialState);
       let resetTargetKeys = [];
 
-      // resetTarget 설정
+      // resetTargetKeys 설정
       if (payload === undefined) {
         resetTargetKeys = initialStateKeys;
       } else if (typeof payload === "string" || payload instanceof String) {
@@ -46,7 +46,7 @@ export function getMutations(getInitialState) {
         resetTargetKeys = payload;
       }
 
-      // resetTarget 존재하는 것만 추출
+      // initialStateKeys에 존재하는 것만 추출
       resetTargetKeys = resetTargetKeys.filter((x) =>
         initialStateKeys.includes(x)
       );
@@ -94,21 +94,18 @@ export function getActions() {
  * @template S - state의 제네릭
  * @template G - getters의 제네릭
  * @template A - actions의 제네릭
- * @template GT - GetterType의 제네릭
  * @param {string} NAMESPACE - Store의 네임스페이스
  * @param {S} state - Store의 state
  * @param {G} getters - Store의 getters
  * @param {A} actions - Store의 actions
- * @param {GT} GetterType - Store의 Getter 유형
  */
-export function createUseStore(NAMESPACE, state, getters, actions, GetterType) {
+export function createUseStore(NAMESPACE, state, getters, actions) {
   /**
-   * @template S, G, A, GT
+   * @template S, G, A
    * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ComputedRefTypes<S> } ComputedRefStates
-   * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractGetterTypes<GT> } ComputedRefGetters
+   * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractGetterTypes<G> } ComputedRefGetters
    * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractTypes<A, (payload: any) => Promise<any>> } ExtractTypesActions
    * @typedef {Object} UseStore
-   * //@property {GT} GetterType - Store의 Getter 유형
    * @property {(state: S) => void} $patch - Store의 State를 변경합니다.
    * @property {(stateKeys?: [keyof S] | keyof S) => void} $reset - Store의 State를 전체 혹은 일부를 초기값 상태로 되돌립니다.
    */
@@ -124,11 +121,10 @@ export function createUseStore(NAMESPACE, state, getters, actions, GetterType) {
       [_ActionType.RESET_STATE]: _$reset,
       [_ActionType.PATCH_STATE]: _$patch,
     } = useActions([_ActionType.RESET_STATE, _ActionType.PATCH_STATE]);
-    /** @type {UseStore<S, G, A, GT> & ComputedRefStates<S, G, A, GT> & ComputedRefGetters<S, G, A, GT> & ExtractTypesActions<S, G, A, GT> } */
+    /** @type {UseStore<S, G, A> & ComputedRefStates<S, G, A> & ComputedRefGetters<S, G, A> & ExtractTypesActions<S, G, A> } */
     let useStoreInstance = {
-      GetterType,
       ...useState(Object.keys(state)),
-      ...useGetters(Object.keys(GetterType)),
+      ...useGetters(Object.keys(getters)),
       ...useActions(Object.keys(actions)),
       async $reset(stateKeys) {
         await _$reset(stateKeys);

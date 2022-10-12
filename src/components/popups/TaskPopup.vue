@@ -71,8 +71,8 @@ function close() {
   taskDataState.value = initialState.taskDataState;
 
   taskStore.$patch({
-    TASK: {},
-    VIEW: {
+    task: {},
+    view: {
       visible: false,
       id: null,
     },

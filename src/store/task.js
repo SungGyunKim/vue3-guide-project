@@ -16,17 +16,6 @@ import taskApi from "@/api/taskApi";
 
 const NAMESPACE = "task";
 
-/**
- * @readonly
- * @enum {string}
- */
-const GetterType = Object.freeze({
-  TOTAL_COUNT: "TOTAL_COUNT",
-  COMPLETED_COUNT: "COMPLETED_COUNT",
-  INCOMPLETE_COUNT: "INCOMPLETE_COUNT",
-  FILTERED_LIST: "FILTERED_LIST",
-});
-
 const state = getInitialState();
 
 function getInitialState() {
@@ -45,21 +34,21 @@ function getInitialState() {
 }
 
 const getters = {
-  [GetterType.TOTAL_COUNT](state) {
+  totalCount(state) {
     return state.list.length;
   },
-  [GetterType.COMPLETED_COUNT](state) {
+  completedCount(state) {
     return state.list.filter((item) => item.completed).length;
   },
-  [GetterType.INCOMPLETE_COUNT](state) {
+  incompleteCount(state) {
     return state.list.filter((item) => !item.completed).length;
   },
-  [GetterType.FILTERED_LIST](state) {
+  filteredList(state) {
     let filteredList = state.list;
 
-    if (state.FILTER === "finished") {
+    if (state.filter === "finished") {
       filteredList = state.list.filter((item) => item.completed);
-    } else if (state.FILTER === "unfinished") {
+    } else if (state.filter === "unfinished") {
       filteredList = state.list.filter((item) => !item.completed);
     }
 
@@ -122,8 +111,7 @@ export const useTaskStore = common.createUseStore(
   NAMESPACE,
   state,
   getters,
-  actions,
-  GetterType
+  actions
 );
 
 export default {

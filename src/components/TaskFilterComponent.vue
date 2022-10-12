@@ -23,19 +23,19 @@ const taskStore = useTaskStore();
  **********************************************************/
 function onFilterAllClick() {
   taskStore.$patch({
-    FILTER: "all",
+    filter: "all",
   });
 }
 
 function onFilterFinishedClick() {
   taskStore.$patch({
-    FILTER: "finished",
+    filter: "finished",
   });
 }
 
 function onFilterUnfinishedClick() {
   taskStore.$patch({
-    FILTER: "unfinished",
+    filter: "unfinished",
   });
 }
 
@@ -47,15 +47,15 @@ function onFilterUnfinishedClick() {
   <div>
     <b-button variant="secondary" class="me-2" @click="onFilterAllClick">
       전체
-      <b-badge variant="light">{{ taskStore.TOTAL_COUNT }}</b-badge>
+      <b-badge variant="light">{{ taskStore.totalCount }}</b-badge>
     </b-button>
     <b-button variant="primary" class="me-2" @click="onFilterFinishedClick">
       완료
-      <b-badge variant="light">{{ taskStore.COMPLETED_COUNT }}</b-badge>
+      <b-badge variant="light">{{ taskStore.completedCount }}</b-badge>
     </b-button>
     <b-button variant="danger" @click="onFilterUnfinishedClick">
       미완료
-      <b-badge variant="light">{{ taskStore.INCOMPLETE_COUNT }}</b-badge>
+      <b-badge variant="light">{{ taskStore.incompleteCount }}</b-badge>
     </b-button>
   </div>
 </template>
