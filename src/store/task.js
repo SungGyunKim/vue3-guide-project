@@ -34,16 +34,16 @@ function getInitialState() {
 }
 
 const getters = {
-  totalCount(state) {
+  totalCount: (state) => {
     return state.list.length;
   },
-  completedCount(state) {
+  completedCount: (state) => {
     return state.list.filter((item) => item.completed).length;
   },
-  incompleteCount(state) {
+  incompleteCount: (state) => {
     return state.list.filter((item) => !item.completed).length;
   },
-  filteredList(state) {
+  filteredList: (state) => {
     let filteredList = state.list;
 
     if (state.filter === "finished") {
