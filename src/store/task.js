@@ -15,7 +15,7 @@ import taskApi from "@/api/taskApi";
 
 const NAMESPACE = "task";
 
-const state = () => ({
+const state = {
   view: {
     visible: false,
     id: null,
@@ -26,7 +26,7 @@ const state = () => ({
   list: [],
   /** @type {'all' | 'finished' | 'unfinished'} */
   filter: "all",
-});
+};
 
 const getters = {
   /**

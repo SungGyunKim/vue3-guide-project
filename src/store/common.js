@@ -149,7 +149,8 @@ export function createUseStore(NAMESPACE, state, getters, mutations, actions) {
 
 function createGetInitialState(state) {
   if (isObject(state)) {
-    return () => state;
+    const _state = JSON.parse(JSON.stringify(state));
+    return () => _state;
   } else if (isFunction(state)) {
     return state;
   }
