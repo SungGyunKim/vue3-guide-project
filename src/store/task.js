@@ -15,22 +15,18 @@ import taskApi from "@/api/taskApi";
 
 const NAMESPACE = "task";
 
-const state = getInitialState();
-
-function getInitialState() {
-  return {
-    view: {
-      visible: false,
-      id: null,
-    },
-    /** @type {Task} */
-    task: null,
-    /** @type {Task[]} */
-    list: [],
-    /** @type {'all' | 'finished' | 'unfinished'} */
-    filter: "all",
-  };
-}
+const state = () => ({
+  view: {
+    visible: false,
+    id: null,
+  },
+  /** @type {Task} */
+  task: null,
+  /** @type {Task[]} */
+  list: [],
+  /** @type {'all' | 'finished' | 'unfinished'} */
+  filter: "all",
+});
 
 const getters = {
   /**
@@ -151,8 +147,7 @@ export const useTaskStore = createUseStore(
   state,
   getters,
   mutations,
-  actions,
-  getInitialState
+  actions
 );
 
 export default {

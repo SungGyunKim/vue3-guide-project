@@ -93,23 +93,17 @@ function getActions() {
 /**
  * @template S - state의 제네릭
  * @template G - getters의 제네릭
- * @template M - getters의 제네릭
+ * @template M - mutations의 제네릭
  * @template A - actions의 제네릭
  * @param {string} NAMESPACE - Store의 네임스페이스
- * @param {S} state - Store의 state
+ * @param {S | (() => S)} state - Store의 state
  * @param {G} getters - Store의 getters
  * @param {M} mutations - Store의 mutations
  * @param {A} actions - Store의 actions
  */
-export function createUseStore(
-  NAMESPACE,
-  state,
-  getters,
-  mutations,
-  actions,
-  _getInitialState
-) {
-  mutations = Object.assign(mutations, getMutations(_getInitialState));
+export function createUseStore(NAMESPACE, state, getters, mutations, actions) {
+  const getInitialState = createGetInitialState(state);
+  mutations = Object.assign(mutations, getMutations(getInitialState));
   actions = Object.assign(actions, getActions());
 
   /**
@@ -136,7 +130,7 @@ export function createUseStore(
      */
     /** @type {UseStore<S, G, A> & ComputedRefStates<S, G, A> & ComputedRefGetters<S, G, A> & ExtractTypesActions<S, G, A> } */
     let useStoreInstance = {
-      ...useState(Object.keys(state)),
+      ...useState(Object.keys(getInitialState())),
       ...useGetters(Object.keys(getters)),
       ...useActions(Object.keys(actions)),
       async $reset(stateKeys) {
@@ -153,9 +147,21 @@ export function createUseStore(
   return _createUseStore;
 }
 
+function createGetInitialState(state) {
+  if (isObject(state)) {
+    return () => state;
+  } else if (isFunction(state)) {
+    return state;
+  }
+}
+
 function isObject(value) {
   return typeof value === "object" && !Array.isArray(value) && value !== null;
 }
 function isEmpty(value) {
   return Object.keys(value).length === 0;
+}
+
+function isFunction(value) {
+  return value instanceof Function;
 }
