@@ -30,7 +30,7 @@ const _ActionType = Object.freeze({
   PATCH_STATE: "_PATCH_STATE",
 });
 
-export function getMutations(getInitialState) {
+function getMutations(getInitialState) {
   return {
     [_MutationType.RESET_STATE](state, payload) {
       const initialState = getInitialState();
@@ -77,7 +77,7 @@ export function getMutations(getInitialState) {
   };
 }
 
-export function getActions() {
+function getActions() {
   return {
     async [_ActionType.RESET_STATE](context, payload) {
       context.commit(_MutationType.RESET_STATE, payload);
@@ -93,13 +93,25 @@ export function getActions() {
 /**
  * @template S - state의 제네릭
  * @template G - getters의 제네릭
+ * @template M - getters의 제네릭
  * @template A - actions의 제네릭
  * @param {string} NAMESPACE - Store의 네임스페이스
  * @param {S} state - Store의 state
  * @param {G} getters - Store의 getters
+ * @param {M} mutations - Store의 mutations
  * @param {A} actions - Store의 actions
  */
-export function createUseStore(NAMESPACE, state, getters, actions) {
+export function createUseStore(
+  NAMESPACE,
+  state,
+  getters,
+  mutations,
+  actions,
+  _getInitialState
+) {
+  mutations = Object.assign(mutations, getMutations(_getInitialState));
+  actions = Object.assign(actions, getActions());
+
   /**
    * Store의 Module을 Composition API에서 편안하게 사용할 수 있도록 합니다.
    */

@@ -10,7 +10,7 @@
 /**
  * @typedef { import("@/model/index").Task } Task
  */
-import * as common from "./common";
+import { createUseStore } from "./common";
 import taskApi from "@/api/taskApi";
 
 const NAMESPACE = "task";
@@ -146,17 +146,19 @@ const actions = {
   },
 };
 
-export const useTaskStore = common.createUseStore(
+export const useTaskStore = createUseStore(
   NAMESPACE,
   state,
   getters,
-  actions
+  mutations,
+  actions,
+  getInitialState
 );
 
 export default {
   namespaced: true,
   state,
   getters,
-  mutations: Object.assign(mutations, common.getMutations(getInitialState)),
-  actions: Object.assign(actions, common.getActions()),
+  mutations,
+  actions,
 };
