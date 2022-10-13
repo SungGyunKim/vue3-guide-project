@@ -8,7 +8,6 @@
  * @copyRight COPYRIGHT © OSSTEM IMPLANT CO., LTD. ALL RIGHTS RESERVED.
  */
 /**
- * @typedef { import("@@/node_modules/vuex/types/index").GetterTree<state, any> } GetterTree
  * @typedef { import("@/model/index").Task } Task
  */
 import * as common from "./common";
@@ -34,15 +33,31 @@ function getInitialState() {
 }
 
 const getters = {
+  /**
+   * {@link state.list}의 전체 건 수입니다.
+   * @param {state} state
+   */
   totalCount: (state) => {
     return state.list.length;
   },
+  /**
+   * {@link state.list}의 item인 {@link Task.completed}가 true인 건 수입니다.
+   * @param {state} state
+   */
   completedCount: (state) => {
     return state.list.filter((item) => item.completed).length;
   },
+  /**
+   * {@link state.list}의 item인 {@link Task.completed}가 false인 건 수입니다.
+   * @param {state} state
+   */
   incompleteCount: (state) => {
     return state.list.filter((item) => !item.completed).length;
   },
+  /**
+   * {@link state.list}를 {@link state.filter}에 따라 필터된 Array를 반환합니다.
+   * @param {state} state
+   */
   filteredList: (state) => {
     let filteredList = state.list;
 
@@ -59,6 +74,10 @@ const getters = {
 const mutations = {};
 
 const actions = {
+  /**
+   * Task 데이터 목록을 조회하여 {@link state.list}를 갱신합니다.
+   * @see taskApi.getAllTask
+   */
   async getAllTask(context, payload) {
     try {
       const result = await taskApi.getAllTask();
@@ -70,6 +89,11 @@ const actions = {
       return Promise.reject(error);
     }
   },
+  /**
+   * Task 목록을 {@link state.list}에 갱신합니다.
+   * @see taskApi.getAllTask()
+   * @see Task
+   */
   async getTaskById(context, payload) {
     try {
       const result = await taskApi.getTaskById(payload.id);
@@ -81,6 +105,11 @@ const actions = {
       return Promise.reject(error);
     }
   },
+  /**
+   * Task 데이터를 추가합니다.
+   * @see taskApi.addTask()
+   * @see Task
+   */
   async addTask(context, payload) {
     try {
       const result = await taskApi.addTask(payload);
@@ -89,6 +118,11 @@ const actions = {
       return Promise.reject(error);
     }
   },
+  /**
+   * id에 해당하는 Task 데이터를 갱신합니다.
+   * @see taskApi.addTask()
+   * @see Task
+   */
   async updateTaskById(context, payload) {
     try {
       const result = await taskApi.updateTaskById(payload);
@@ -97,6 +131,11 @@ const actions = {
       return Promise.reject(error);
     }
   },
+  /**
+   * id에 해당하는 Task 데이터를 삭제합니다.
+   * @see taskApi.addTask()
+   * @see Task
+   */
   async deleteTaskById(context, payload) {
     try {
       const result = await taskApi.deleteTaskById(payload);

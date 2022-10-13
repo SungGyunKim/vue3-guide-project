@@ -101,15 +101,6 @@ export function getActions() {
  */
 export function createUseStore(NAMESPACE, state, getters, actions) {
   /**
-   * @template S, G, A
-   * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ComputedRefTypes<S> } ComputedRefStates
-   * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractGetterTypes<G> } ComputedRefGetters
-   * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractTypes<A, (payload: any) => Promise<any>> } ExtractTypesActions
-   * @typedef {Object} UseStore
-   * @property {(state: S) => void} $patch - Store의 State를 변경합니다.
-   * @property {(stateKeys?: [keyof S] | keyof S) => void} $reset - Store의 State를 전체 혹은 일부를 초기값 상태로 되돌립니다.
-   */
-  /**
    * Store의 Module을 Composition API에서 편안하게 사용할 수 있도록 합니다.
    */
   function _createUseStore() {
@@ -121,6 +112,16 @@ export function createUseStore(NAMESPACE, state, getters, actions) {
       [_ActionType.RESET_STATE]: _$reset,
       [_ActionType.PATCH_STATE]: _$patch,
     } = useActions([_ActionType.RESET_STATE, _ActionType.PATCH_STATE]);
+
+    /**
+     * @template S, G, A
+     * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ComputedRefTypes<S> } ComputedRefStates
+     * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractGetterTypes<G> } ComputedRefGetters
+     * @typedef {import("@@/node_modules/vuex-composition-helpers/dist/types/util").ExtractTypes<A, (payload: any) => Promise<any>> } ExtractTypesActions
+     * @typedef {Object} UseStore
+     * @property {(state: S) => void} $patch - Store의 State를 변경합니다.
+     * @property {(stateKeys?: [keyof S] | keyof S) => void} $reset - Store의 State를 전체 혹은 일부를 초기값 상태로 되돌립니다.
+     */
     /** @type {UseStore<S, G, A> & ComputedRefStates<S, G, A> & ComputedRefGetters<S, G, A> & ExtractTypesActions<S, G, A> } */
     let useStoreInstance = {
       ...useState(Object.keys(state)),
